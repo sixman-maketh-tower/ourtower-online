@@ -1,0 +1,16 @@
+{
+  "name": "stage",
+  "version": "1.0.0",
+  "data": [
+    {
+      "id": 101,
+      "timestamp": 30,
+      "monster_id": 1001
+    },
+    {
+      "id": 102,
+      "timestamp": 60,
+      "monster_id": 1002
+    }
+  ]
+}
