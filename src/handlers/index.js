@@ -3,8 +3,11 @@ import { CustomError } from '../utils/error/customError.js';
 import { ErrorCodes } from '../utils/error/errorCodes.js';
 
 const handlers = {
+  [HANDLER_IDS.REGISTER]: {
+    protoType: 'GamePacket',
+  },
   [HANDLER_IDS.LOGIN]: {
-    protoType: 'game.C2SLoginRequest',
+    protoType: 'GamePacket',
   },
 };
 
