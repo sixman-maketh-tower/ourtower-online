@@ -40,12 +40,8 @@ export const loadProtos = async () => {
     // 모든 proto 파일들을 root 하위 Node에 로딩한다.
     await Promise.all(protoFiles.map((file) => root.load(file)));
 
-    for (const [packageName, types] of Object.entries(packetNames)) {
-      protoMessages[packageName] = {};
-      for (const [type, typeName] of Object.entries(types)) {
-        // lookupType(typeName) : root 하위에 typeName을 가진 Node의 Message Type을 가져온다.
-        protoMessages[packageName][type] = root.lookupType(typeName);
-      }
+    for (const typeName of Object.values(packetNames)) {
+      protoMessages[typeName] = root.lookupType(typeName);
     }
 
     console.log(`ProtoBuf 파일 로드에 성공하였습니다.`);

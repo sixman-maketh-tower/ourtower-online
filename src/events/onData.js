@@ -64,7 +64,7 @@ export const onData = (socket) => async (data) => {
 
             const handler = getHandlerById(packetType);
 
-            await handler({ socket, userId, payload });
+            await handler({ socket, userId: 1, payload });
           }
           break;
       }
