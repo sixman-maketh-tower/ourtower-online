@@ -1,4 +1,4 @@
-import { getProtoTypeById } from '../../handlers/index.js';
+import { getProtoPayloadTypeNameById, getProtoTypeById } from '../../handlers/index.js';
 import { getProtoMessages } from '../../init/proto.js';
 import { CustomError } from '../error/customError.js';
 import { ErrorCodes } from '../error/errorCodes.js';
@@ -19,6 +19,7 @@ export const packetParser = (data, packetType) => {
 
   const payloadTypeStructure = protoMessages[protoTypeName];
 
+  const payloadTypeName = getProtoPayloadTypeNameById(packetType);
   //console.log(protoTypeName);
 
   let payload;
@@ -33,7 +34,7 @@ export const packetParser = (data, packetType) => {
     );
   }
 
-  console.log(payload);
+  payload = payload[payloadTypeName];
 
   // verify 과정은 이미 위의 decode 함수 내부에서 자체적으로 수행되지만, 우선 구현은 해놓는다.
   const errorMessage = payloadTypeStructure.verify(payload);

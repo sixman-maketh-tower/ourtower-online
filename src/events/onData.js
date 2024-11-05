@@ -50,6 +50,10 @@ export const onData = (socket) => async (data) => {
             const { payload } = packetParser(packet, packetType);
 
             console.log(`Packet Type: ${packetType}, Payload: ${payload}`);
+
+            const handler = getHandlerById(packetType);
+
+            await handler({ socket, userId: 1, payload });
           }
           break;
         case PACKET_TYPES.LOGIN_REQUEST:
@@ -58,9 +62,9 @@ export const onData = (socket) => async (data) => {
 
             console.log(`Packet Type: ${packetType}, Payload: ${payload}`);
 
-            //const handler = getHandlerById(packetType);
+            const handler = getHandlerById(packetType);
 
-            //await handler({ socket, userId, payload });
+            await handler({ socket, userId: 1, payload });
           }
           break;
       }
