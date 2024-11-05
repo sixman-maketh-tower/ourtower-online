@@ -45,6 +45,13 @@ export const onData = (socket) => async (data) => {
 
     try {
       switch (packetType) {
+        case PACKET_TYPES.REGISTER_REQUEST:
+          {
+            const { payload } = packetParser(packet, packetType);
+
+            console.log(`Packet Type: ${packetType}, Payload: ${payload}`);
+          }
+          break;
         case PACKET_TYPES.LOGIN_REQUEST:
           {
             const { payload } = packetParser(packet, packetType);
