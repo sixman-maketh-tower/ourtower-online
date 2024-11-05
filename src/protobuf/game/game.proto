@@ -1,6 +1,5 @@
 syntax = "proto3";
 
-package game;
 /* 
   실패 코드
 */
