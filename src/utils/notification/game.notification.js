@@ -1,6 +1,4 @@
-import { PACKET_TYPES } from '../../constants/packetTypes.js';
-
-export const makeNotofication = (message, type) => {
+const makeNotofication = (message, type) => {
   const packetLength = Buffer.alloc(config.packet.totalLength);
   packetLength.writeUInt32BE(message.length + config.packet.totalLength + config.packet.typeLength);
 
