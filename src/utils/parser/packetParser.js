@@ -26,7 +26,7 @@ export const packetParser = (data, packetType) => {
 
   // protoType에 해당하는 proto 구조로 Decodeing 해준다.
   try {
-    payload = payloadTypeStructure.decode(data);
+    payload = payloadTypeStructure.decode(data)[payloadTypeName];
   } catch (err) {
     throw new CustomError(
       ErrorCodes.PACKET_DECODE_ERROR,

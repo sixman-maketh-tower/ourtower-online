@@ -4,6 +4,7 @@ import {
   PAYLOAD_LENGTH,
   VERSION_LENGTH,
   SEQUENCE_LENGTH,
+  MAX_PLAYER,
 } from '../constants/packetTypes.js';
 
 export const config = {
@@ -19,5 +20,12 @@ export const config = {
     versionLength: VERSION_LENGTH,
     sequenceLength: SEQUENCE_LENGTH,
     payloadLength: PAYLOAD_LENGTH,
+  },
+  game: {
+    maxPlayer: MAX_PLAYER,
+    state: {
+      waiting: 'waiting',
+      playing: 'inProgress',
+    },
   },
 };
