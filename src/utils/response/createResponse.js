@@ -1,6 +1,6 @@
 import { PACKET_TYPE_NAMES, PACKET_TYPES } from '../../constants/packetTypes.js';
 import { getProtoMessages } from '../../init/proto.js';
-import { createHeader } from '../header/createHeader,js';
+import { createHeader } from '../header/createHeader.js';
 
 export const createResponse = (packetType, data = null) => {
   const protoMessages = getProtoMessages();
