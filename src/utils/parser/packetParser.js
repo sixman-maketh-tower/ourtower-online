@@ -6,8 +6,6 @@ import { ErrorCodes } from '../error/errorCodes.js';
 export const packetParser = (data, packetType) => {
   const protoMessages = getProtoMessages();
 
-  //console.log(data);
-
   const protoTypeName = getProtoTypeById(packetType);
   // protoTypeName 검증
   if (!protoTypeName) {
