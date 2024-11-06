@@ -15,19 +15,19 @@ const registerHandler = async ({ socket, userId, payload }) => {
     });
     console.log('fail: empty value');
     socket.write(registerFailResponse);
-  };
+  }
   // 1. user 테이블에 해당 id(accountId)가 있는지 검사한다.
   const user = await findUserByAccountId(id);
-  console.log(JSON.stringify(user))
+  console.log(JSON.stringify(user));
   // 1-1. 만약 똑같은 id가 있다면 response 실패를 보낸다.
   if (user) {
-  const registerFailResponse = createResponse(PACKET_TYPES.REGISTER_RESPONSE, {
-    success: false,
-    message: 'Failed',
-    failCode: 2,
-  });
-  console.log('fail: ' + JSON.stringify(user) + '/' + user['id']);
-  socket.write(registerFailResponse);
+    const registerFailResponse = createResponse(PACKET_TYPES.REGISTER_RESPONSE, {
+      success: false,
+      message: 'Failed',
+      failCode: 2,
+    });
+    console.log('fail: ' + JSON.stringify(user) + '/' + user['id']);
+    socket.write(registerFailResponse);
   } else {
     const regiUser = await createUser(id, password, email);
     console.log(regiUser);
@@ -36,9 +36,9 @@ const registerHandler = async ({ socket, userId, payload }) => {
       message: 'Success',
       failCode: 0,
     });
-  
+
     socket.write(registerResponse);
-  };
+  }
   // 가능한 경우
   // 2. id, password, email을 user 테이블에 저장한다.(create)
 };
