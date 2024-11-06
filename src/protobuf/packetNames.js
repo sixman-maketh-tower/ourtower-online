@@ -1,3 +1,5 @@
 export const packetNames = {
-  GAME: 'GamePacket',
+  response: '',
+  game: 'GamePacket',
+  gameNotification: '',
 };
