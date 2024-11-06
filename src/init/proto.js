@@ -37,7 +37,7 @@ export const loadProtos = async () => {
   try {
     const root = new protobuf.Root();
 
-    // 모든 proto 파일들을 root 하위 Node에 로딩한다.
+    // 모든 proto 데이터들을 root 하위 Node에 로딩한다.
     await Promise.all(protoFiles.map((file) => root.load(file)));
 
     for (const typeName of Object.values(packetNames)) {
