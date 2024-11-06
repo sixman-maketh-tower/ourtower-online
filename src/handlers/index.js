@@ -17,10 +17,10 @@ const handlers = {
     protoType: 'GamePacket',
     protoPayloadType: PACKET_TYPE_NAMES[HANDLER_IDS.LOGIN],
   },
-  [HANDLER_IDS.MATCH_START_NOTIFICATION]: {
+  [HANDLER_IDS.MATCH_REQUEST]: {
     handler: matchingGameHandler,
     protoType: 'GamePacket',
-    protoPayloadType: PACKET_TYPE_NAMES[HANDLER_IDS.MATCH_START_NOTIFICATION],
+    protoPayloadType: PACKET_TYPE_NAMES[HANDLER_IDS.MATCH_REQUEST],
   },
 };
 

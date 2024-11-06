@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import { addGameSession } from '../../session/game.session.js';
+import { findWaitingGame } from '../../session/game.session.js';
 import { createResponse } from '../../utils/response/createResponse.js';
 import { handlerError } from '../../utils/error/errorHandler.js';
 import { HANDLER_IDS, RESPONSE_SUCCESS_CODE } from '../../constants/handlerIds.js';
@@ -10,7 +10,7 @@ import { ErrorCodes } from '../../utils/error/errorCodes.js';
 const createGameHandler = ({ socket, userId, payload }) => {
   try {
     const gameId = uuidv4();
-    const gameSession = addGameSession(gameId);
+    const gameSession = findWaitingGame(gameId);
 
     const user = getUserById(userId);
     if (!user) {

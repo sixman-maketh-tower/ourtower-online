@@ -3,7 +3,7 @@ syntax = "proto3";
 /* 
   실패 코드
 */
-export enum GlobalFailCode {
+ enum GlobalFailCode {
     NONE = 0;
     UNKNOWN_ERROR = 1;
     INVALID_REQUEST = 2;

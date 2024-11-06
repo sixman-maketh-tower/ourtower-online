@@ -13,8 +13,8 @@ import {
   PAYLOAD_LENGTH,
   VERSION_LENGTH,
   SEQUENCE_LENGTH,
-  MAX_PLAYER,
 } from '../constants/packetTypes.js';
+import { MAX_PLAYER } from '../constants/game.js';
 
 export const config = {
   server: {
