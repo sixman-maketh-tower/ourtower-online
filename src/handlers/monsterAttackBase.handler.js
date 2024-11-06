@@ -2,7 +2,7 @@ import { PACKET_TYPES } from '../constants/packetTypes.js';
 import { createResponse } from '../utils/response/createResponse.js';
 import { getGame } from '../session/game.session.js';
 import { getUserById } from '../session/user.session.js';
-import { createMonsterSession, getAttackedBase, setAttackedBase } from '../session/monster.session.js';
+import { createMonsterData, getAttackedBase, setAttackedBase } from '../model/monster.model.js';
 import { getTotalAttackedDamage } from '../utils/monster.util.js';
 
 const monsterAttackBaseHandler = async ({ socket, userId, payload }) => {
@@ -23,7 +23,7 @@ const monsterAttackBaseHandler = async ({ socket, userId, payload }) => {
     let userAttackedBase = getAttackedBase(userId);
 
     if (!userAttackedBase) {
-      createMonsterSession(userId);
+      createMonsterData(userId);
       userAttackedBase = getAttackedBase(userId);
       if(!userAttackedBase) {
         console.error(`User's Monster Session not found`);

@@ -7,17 +7,19 @@ export const createResponse = (packetType, data = null) => {
 
   // proto 데이터들 중 GamePacket message를 가져온다.
   const responseStructure = protoMessages.GamePacket;
+  console.log(packetType);
 
   // GamePacket message의 oneof paylaod 중 packetType에 맞는 특정 message의 이름을 가져온다.
   const packetTypeName = PACKET_TYPE_NAMES[packetType];
+  console.log(packetTypeName);
 
   // responsePayload : oneof 형태로 encode하기 위해 {Key, Value} Object 구조로 만들어준다.
   // - Key : 패킷 타입 이름
   // - Value : 페이로드 데이터
   const responsePayload = {};
+  console.log(responsePayload[packetTypeName]);
   responsePayload[packetTypeName] = data;
-
-  // console.log(responsePayload);
+  console.log(responsePayload);
 
   // responseStructure(GamePacket message) 틀에 responsePayload 데이터를 encode 해준다.
   const payloadBuffer = responseStructure.encode(responsePayload).finish();

@@ -5,6 +5,9 @@ import { ErrorCodes } from '../utils/error/errorCodes.js';
 import loginHandler from './login.handler.js';
 import registerHandler from './register.Handler.js';
 import monsterAttackBaseHandler from './monsterAttackBase.handler.js';
+import updateBaseHpNotificationHandler from './updateBaseHpNotification.handler.js';
+import gameOverNotificationHandler from './gameOverNotification.handler.js';
+import gameEndNotificationHandler from './gameEndNotification.handler.js';
 
 const handlers = {
   [HANDLER_IDS.REGISTER]: {
@@ -22,6 +25,21 @@ const handlers = {
     protoType: 'GamePacket',
     protoPayloadType: PACKET_TYPE_NAMES[HANDLER_IDS.MONSTER_ATTACK_BASE],
   },
+  [HANDLER_IDS.UPDATE_BASE_HP]: {
+    handler: updateBaseHpNotificationHandler,
+    protoType: 'GamePacket',
+    protoPayloadType: PACKET_TYPE_NAMES[HANDLER_IDS.UPDATE_BASE_HP],
+  },
+  [HANDLER_IDS.GAME_OVER]: {
+    handler: gameOverNotificationHandler,
+    protoType: 'GamePacket',
+    protoPayloadType: PACKET_TYPE_NAMES[HANDLER_IDS.GAME_OVER],
+  },
+  [HANDLER_IDS.GAME_END]: {
+    handler: gameEndNotificationHandler,
+    protoType: 'GamePacket',
+    protoPaylaodType: PACKET_TYPE_NAMES[HANDLER_IDS.GAME_END],
+  }
 };
 
 export const getHandlerById = (packetType) => {
