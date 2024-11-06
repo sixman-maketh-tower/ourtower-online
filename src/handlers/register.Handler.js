@@ -7,7 +7,7 @@ const registerHandler = async ({ socket, userId, payload }) => {
   console.log(id, password, email);
 
   const registerResponse = createResponse(PACKET_TYPES.REGISTER_RESPONSE, {
-    success: 0,
+    success: true,
     message: 'Success',
     failCode: 0,
   });

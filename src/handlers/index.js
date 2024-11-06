@@ -40,7 +40,7 @@ export const getProtoTypeById = (packetType) => {
   return handlers[packetType].protoType;
 };
 
-export const getProtoPayloadTypeNameById = (packetType) => {
+export const getProtoPayloadTypeById = (packetType) => {
   if (!handlers[packetType]) {
     throw new CustomError(
       ErrorCodes.UNKNOWN_HANDLER_ID,
