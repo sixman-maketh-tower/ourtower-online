@@ -4,6 +4,7 @@ import { CustomError } from '../utils/error/customError.js';
 import { ErrorCodes } from '../utils/error/errorCodes.js';
 import loginHandler from './login.handler.js';
 import registerHandler from './register.Handler.js';
+import monsterAttackBaseHandler from './monsterAttackBase.handler.js';
 
 const handlers = {
   [HANDLER_IDS.REGISTER]: {
@@ -15,6 +16,11 @@ const handlers = {
     handler: loginHandler,
     protoType: 'GamePacket',
     protoPayloadType: PACKET_TYPE_NAMES[HANDLER_IDS.LOGIN],
+  },
+  [HANDLER_IDS.MONSTER_ATTACK_BASE]: {
+    handler: monsterAttackBaseHandler,
+    protoType: 'GamePacket',
+    protoPayloadType: PACKET_TYPE_NAMES[HANDLER_IDS.MONSTER_ATTACK_BASE],
   },
 };
 
