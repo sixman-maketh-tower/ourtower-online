@@ -2,12 +2,12 @@ import { config } from '../../config/config.js';
 import {
   CANVAS_HEIGH,
   CANVAS_WIDTH,
+  INIT_BASE_DATA,
   INIT_BASE_HP,
   INIT_GOLD,
   INIT_MONSTER_SPAWN_INTERVAL,
   INIT_TOWER_COST,
 } from '../../constants/game.js';
-import { getUserById } from '../../session/user.session.js';
 import { gameStartNotification } from '../../utils/notification/game.notification.js';
 
 class Game {
@@ -28,7 +28,7 @@ class Game {
 
     if (this.users.length === config.game.maxPlayer) {
       setTimeout(() => {
-        this.startGame();
+        this.startGame(user.id);
       }, 2000);
     }
   }
@@ -57,7 +57,7 @@ class Game {
   //   return userHighScore;
   // }
 
-  startGame() {
+  startGame(userId) {
     if (this.users.length !== config.game.maxPlayer) {
       return false;
     }
@@ -77,7 +77,7 @@ class Game {
     };
     const playerData = {
       gold: INIT_GOLD,
-      base: INIT_BASE_HP,
+      base: INIT_BASE_DATA,
       highScore: 0,
       towers: [],
       monsters: [],
@@ -88,7 +88,7 @@ class Game {
     };
     const opponentData = {
       gold: INIT_GOLD,
-      base: INIT_BASE_HP,
+      base: INIT_BASE_DATA,
       highScore: 0,
       towers: [],
       monsters: [],
@@ -99,7 +99,10 @@ class Game {
     };
 
     this.users.forEach((user, index) => {
-      const startPacket = gameStartNotification(initialGameState, playerData, opponentData);
+      let startPacket = null;
+      if (userId === user.id)
+        startPacket = gameStartNotification(initialGameState, playerData, opponentData);
+      else startPacket = gameStartNotification(initialGameState, opponentData, playerData);
       user.socket.write(startPacket);
     });
 
