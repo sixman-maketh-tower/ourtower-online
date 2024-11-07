@@ -14,7 +14,17 @@ import {
   VERSION_LENGTH,
   SEQUENCE_LENGTH,
 } from '../constants/packetTypes.js';
-import { MAX_PLAYER } from '../constants/game.js';
+import {
+  CANVAS_HEIGH,
+  CANVAS_WIDTH,
+  GAME_STATE_PLAYING,
+  GAME_STATE_WAITING,
+  INIT_BASE_HP,
+  INIT_GOLD,
+  INIT_MONSTER_SPAWN_INTERVAL,
+  INIT_TOWER_COST,
+  MAX_PLAYER,
+} from '../constants/game.js';
 
 export const config = {
   server: {
@@ -33,8 +43,18 @@ export const config = {
   game: {
     maxPlayer: MAX_PLAYER,
     state: {
-      waiting: 'waiting',
-      playing: 'inProgress',
+      waiting: GAME_STATE_WAITING,
+      playing: GAME_STATE_PLAYING,
+    },
+    initData: {
+      baseHp: INIT_BASE_HP,
+      towerCost: INIT_TOWER_COST,
+      gold: INIT_GOLD,
+      monsterSpawnInterval: INIT_MONSTER_SPAWN_INTERVAL,
+    },
+    canvas: {
+      width: CANVAS_WIDTH,
+      height: CANVAS_HEIGH,
     },
   },
   database: {
