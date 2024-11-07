@@ -1,23 +1,26 @@
 import { PACKET_TYPES } from '../constants/packetTypes.js';
 import { createResponse } from '../utils/response/createResponse.js';
-import { getGame } from '../session/game.session.js';
+import { getGame, getGameSessions } from '../session/game.session.js';
 import { getUserById } from '../session/user.session.js';
 import { createMonsterData, getAttackedBase, setAttackedBase } from '../model/monster.model.js';
 import { getTotalAttackedDamage } from '../utils/monster.util.js';
 
 const monsterAttackBaseHandler = async ({ socket, userId, payload }) => {
   try {
-    const { gameId, damage } = payload;
-    const gameSession = getGame(gameId);
-
-    if (!gameSession) {
-      console.error('Game not found');
-    }
+    const { damage } = payload;
 
     const user = getUserById(userId);
 
     if (!user) {
       console.error('User not found');
+    }
+
+    // 유저가 들어있는 게임 세션을 찾아야함
+    const gameSessions = getGameSessions();
+    const gameSession = gameSessions.find((session) => session.users.includes(userId));
+
+    if (!gameSession) {
+      console.error('Game not found');
     }
 
     let userAttackedBase = getAttackedBase(userId);
@@ -52,15 +55,7 @@ const monsterAttackBaseHandler = async ({ socket, userId, payload }) => {
       console.error(`Invalid damage`);
     }
 
-    // 유저의 기지 체력이 0 이하인가를 여기서 처리?
-
-    const monsterAttackBaseResponse = createResponse(PACKET_TYPES.MONSTER_ATTACK_BASE_REQUEST, {
-      success: 0,
-      message: 'success',
-      failCode: 0,
-    });
-
-    socket.write(monsterAttackBaseResponse);
+    gameSession.getAllBaseHp(user.id, user.baseHp);
   } catch (e) {
     console.error('monsterAttackBaseHandler Error: ', e);
   }
