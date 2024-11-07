@@ -53,7 +53,7 @@ export const onData = (socket) => async (data) => {
       // packetType에 맞는 핸들러를 얻어온다.
       const handler = getHandlerById(packetType);
 
-      await handler({ socket, userId: 1, payload });
+      await handler({ socket, userId: 4, payload });
     } catch (err) {
       handlerError(socket, err);
     }
