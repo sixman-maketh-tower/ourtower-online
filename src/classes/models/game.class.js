@@ -1,8 +1,4 @@
 import { config } from '../../config/config.js';
-import {
-  gameOverNotification,
-  updateBaseHpNotification,
-} from '../../utils/notification/game.notification.js';
 
 class Game {
   constructor(id) {
@@ -32,34 +28,16 @@ class Game {
     this.state = config.game.state.playing;
   }
 
-  // 기존 강의는 내가 상대방의 위치정보도 받는거고
-  // 이번 과제에서는 Hp가 깎인걸 나도 받고 상대방도 받아야함
-  getAllBaseHp(attackedUserId, attackedUserBaseHp) {
-    // forEach나 for문으로 체력이 까진 당사자의 baseHp 소켓을 socket.write로 보내줘야할듯
-    // 게임안에는 2명의 유저가 존재
-    this.users.forEach((user) => {
-      const socket = user.socket;
-      if (user.id === attackedUserId) {
-        const AttackedUserPacket = updateBaseHpNotification(false, attackedUserBaseHp);
-        socket.write(AttackedUserPacket);
-      } else {
-        const AnotherUserPacket = updateBaseHpNotification(true, attackedUserBaseHp);
-        socket.write(AnotherUserPacket);
-      }
-    });
-  }
+  getAllBaseHp() {
+    const baseHpData = this.users
+      .filter((user) => user.id !== userId) // 본인말고 다른 유저의 정보를 가져옴
+      .map((user) => {
+        // 가져온 정보로 객체를 생성
+        const {baseHp} = user.getBaseHp();
+        return { packetType: 17, isOpponent: true, baseHp };
+      });
 
-  gameOver() {
-    this.users.forEach((user) => {
-      const socket = user.socket;
-      if (user.baseHp > 0) {
-        const winUserPacket = gameOverNotification(true);
-        socket.write(winUserPacket);
-      } else {
-        const loseUserPacket = gameOverNotification(false);
-        socket.write(loseUserPacket);
-      }
-    });
+    return createUpdateBaseHpPacket(baseHpData);
   }
 }
 
