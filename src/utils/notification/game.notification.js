@@ -13,6 +13,20 @@ export const makeNotification = (message, type) => {
   return Buffer.concat([packetLength, packetType, message]);
 };
 
+export const gameStartNotification = (initialGameState, playerData, opponentData) => {
+  const protoMessages = getProtoMessages();
+  const gamePacket = protoMessages.GamePacket;
+
+  const startPacketTypeName = PACKET_TYPE_NAMES[PACKET_TYPES.MATCH_START_NOTIFICATION];
+
+  const payload = {};
+  payload[startPacketTypeName] = { initialGameState, playerData, opponentData };
+
+  const startPacket = gamePacket.encode(payload).finish();
+
+  return makeNotification(startPacket, PACKET_TYPES.MATCH_START_NOTIFICATION);
+};
+
 export const updateBaseHpNotification = (isOpponent, baseHp) => {
   const protoMessages = getProtoMessages();
   // proto 데이터들 중 GamePacket message를 가져온다.

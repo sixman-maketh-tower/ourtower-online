@@ -12,11 +12,7 @@ class User {
   getNextSequence() {
     return ++this.sequence;
   }
-
-  gameOver() {
-
-  }
-
+  
   attackedBase(damage) {
     this.baseHp -= damage;
     this.lastUpdateTime = Date.now();
