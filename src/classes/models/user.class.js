@@ -7,8 +7,6 @@ class User {
     this.score = 0;
     this.gold = 0;
     this.baseHp = 100; // 게임세션 생성 시 init으로 초기화?
-    this.opponent = false;
-    this.gameOver = false;
   }
 
   getNextSequence() {
@@ -22,11 +20,6 @@ class User {
   attackedBase(damage) {
     this.baseHp -= damage;
     this.lastUpdateTime = Date.now();
-  }
-  
-  updateBaseHp(baseHp) {
-    this.baseHp = baseHp;
-    this.lastUpdateTime = Date.now(); 
   }
 
   getBaseHp() {
