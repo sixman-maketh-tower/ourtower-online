@@ -17,8 +17,6 @@ export const createResponse = (packetType, data = null) => {
   const responsePayload = {};
   responsePayload[packetTypeName] = data;
 
-  // console.log(responsePayload);
-
   // responseStructure(GamePacket message) 틀에 responsePayload 데이터를 encode 해준다.
   const payloadBuffer = responseStructure.encode(responsePayload).finish();
 

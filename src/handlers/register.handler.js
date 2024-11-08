@@ -1,6 +1,6 @@
 import { PACKET_TYPES } from '../constants/packetTypes.js';
 import { createResponse } from '../utils/response/createResponse.js';
-import { findUserByAccountId, createUser } from '../db/user/user.db.js';
+import { findUserByAccountId, createUser, createHighScore } from '../db/user/user.db.js';
 import Joi from 'joi';
 import bcrypt from 'bcrypt';
 
@@ -48,6 +48,8 @@ const registerHandler = async ({ socket, userId, payload }) => {
     } else {
       const hashedPassword = await bcrypt.hash(password, 10);
       const regiUser = await createUser(id, hashedPassword, email);
+      const dbUser = await findUserByAccountId(id);
+      await createHighScore(dbUser.id, 0);
       console.log(regiUser);
       const registerResponse = createResponse(PACKET_TYPES.REGISTER_RESPONSE, {
         success: true,

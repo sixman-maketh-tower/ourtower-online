@@ -15,3 +15,17 @@ export const createUser = async (accountId, password, email) => {
 export const updateUserLogin = async (accountId) => {
     await dbPool.query(USER_QUERIES.UPDATE_USER_LOGIN, [accountId]);
 };
+
+export const findHighScoreByUserId = async (userId) => {
+    const [rows] = await dbPool.query(USER_QUERIES.FIND_HIGHSCORE_BY_USER_ID, [userId]);
+    return rows[0].highScore;
+};
+
+export const createHighScore = async (userId, score) => {
+    await dbPool.query(USER_QUERIES.CREATE_HIGHSCORE, [userId, score]);
+    return { score };
+};
+
+export const updateHighScore = async (userId, score) => {
+    await dbPool.query(USER_QUERIES.UPDATE_HIGHSCORE, [userId, score]);
+};
