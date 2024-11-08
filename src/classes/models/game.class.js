@@ -48,7 +48,7 @@ class Game {
   }
 
   // getUserHighScore(userId) {
-  //   const userData = this.getUser(userId);
+  //   const userData = getUserById(userId);
   //   const userHighScore = userData.highScore;
   //   return userHighScore;
   // }
@@ -61,8 +61,14 @@ class Game {
     this.state = config.game.state.playing;
     this.path = this.initMonsterPath(CANVAS_WIDTH, CANVAS_HEIGH);
 
+    const opponentUserId = this.getOpponentUserId(userId);
+    this.getUser(userId).state = config.game.state.playing;
+    this.getUser(opponentUserId).state = config.game.state.playing;
+
+    const player1 = this.getUser(userId);
+    const player2 = this.getUser(opponentUserId);
+
     // const playerHighScore = this.getUserHighScore(userId);
-    // const opponentUserId = this.getOpponentUserId(userId);
     // const opponentHighScore = this.getUserHighScore(opponentUserId);
 
     const initialGameState = {
@@ -72,24 +78,24 @@ class Game {
       monsterSpawnInterval: INIT_MONSTER_SPAWN_INTERVAL,
     };
     const playerData = {
-      gold: INIT_GOLD,
+      gold: player1.gold,
       base: INIT_BASE_DATA,
       highScore: 0,
-      towers: [],
+      towers: player1.towers,
       monsters: [],
       monsterLevel: 0,
-      score: 0,
+      score: player1.score,
       monsterPath: this.path,
       basePosition: this.path[this.path.length - 1],
     };
     const opponentData = {
-      gold: INIT_GOLD,
+      gold: player2.gold,
       base: INIT_BASE_DATA,
       highScore: 0,
-      towers: [],
+      towers: player2.towers,
       monsters: [],
       monsterLevel: 0,
-      score: 0,
+      score: player2.score,
       monsterPath: this.path,
       basePosition: this.path[this.path.length - 1],
     };
@@ -107,6 +113,7 @@ class Game {
 
   initMonsterPath() {
     const path = [];
+    
     let width = 60;
     let angle = 0;
     let isUp = false;
@@ -158,7 +165,6 @@ class Game {
 
     return path;
   }
-
 }
 
 export default Game;
