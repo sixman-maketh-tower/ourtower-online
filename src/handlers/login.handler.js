@@ -29,7 +29,7 @@ const loginHandler = async ({ socket, userId, payload }) => {
         success: false,
         message: 'Fail: Dismatch password',
         token: '',
-        failCode: 3,
+        failCode: 2,
       });
       console.log('Fail: Dismatch password');
       socket.write(loginFailResponse);
