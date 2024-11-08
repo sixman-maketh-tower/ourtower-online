@@ -10,19 +10,19 @@ const spawnMonsterHandler = async ({ socket, userId, payload }) => {
   const monsterId = monsterUniqueId++;
   const monsterNumber = 1;
 
+  // user (player)
   const player = getUserBySocket(socket);
 
-  console.log(`몬스터 생성 요청한 유저: ${player.id}`);
-
   const gameSession = getGameSessions().find((game) => game.users.includes(player));
-
-  const opponent = gameSession.users.find((user) => user.id !== player.id);
 
   const spawnMonsterResponse = createResponse(PACKET_TYPES.SPAWN_MONSTER_RESPONSE, {
     monsterId,
     monsterNumber,
   });
   player.socket.write(spawnMonsterResponse);
+
+  // opponent
+  const opponent = gameSession.users.find((user) => user.id !== player.id);
 
   const spawnMonsterNotificationPacket = spawnMonsterNotification(monsterId, monsterNumber);
   opponent.socket.write(spawnMonsterNotificationPacket);

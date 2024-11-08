@@ -107,7 +107,6 @@ class Game {
   }
 
   initMonsterPath() {
-  initMonsterPath() {
     const path = [];
 
     let width = 60;
