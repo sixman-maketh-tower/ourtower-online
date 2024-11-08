@@ -1,3 +1,4 @@
+import { addEnemyTowerNotification } from "../../utils/notification/game.notification.js";
 import Tower from "./tower.class.js";
 
 class User {
@@ -7,8 +8,9 @@ class User {
     this.lastUpdateTime = Date.now();
     this.sequence = 0;
     this.score = 0;
-    this.gold = 0;
+    this.gold = 3000;
     this.towers = [];
+    this.towerUniqueId = 0;
   }
 
   getNextSequence() {
@@ -27,12 +29,15 @@ class User {
     return this.towers.length;
   };
   
-    bindTower = (payload, userId) => {
-     const { x, y } = payload;
-     const coordinateX = x;
-     const coordinateY = y;
-     const tower = new Tower(coordinateX, coordinateY, userId)
-    return this.towers.push(tower);
+  // 
+    bindTower = (socket, x, y) => {
+     const tower = new Tower(x, y, this.towerUniqueId++);
+     this.towers.push(tower);
+
+     console.log('towerId?:', this.towerUniqueId)
+
+     socket.write(addEnemyTowerNotification(this.towerUniqueId, x, y))
+    return tower;
   };
 }
 
