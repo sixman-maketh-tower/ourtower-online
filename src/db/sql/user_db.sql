@@ -17,3 +17,10 @@ CREATE TABLE IF NOT EXISTS gameLog (
     FOREIGN KEY (winUserId) REFERENCES user (id),
     FOREIGN KEY (loseUserId) REFERENCES user (id)
 );
+
+CREATE TABLE IF NOT EXISTS score (
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    userId INT NOT NULL UNIQUE,
+    highScore INT NOT NULL,
+    FOREIGN KEY (userId) REFERENCES user (id)
+);

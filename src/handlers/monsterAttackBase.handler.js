@@ -1,9 +1,7 @@
-import { PACKET_TYPES } from '../constants/packetTypes.js';
-import { createResponse } from '../utils/response/createResponse.js';
-import { getGame, getGameSessions } from '../session/game.session.js';
+import { getGameSessions } from '../session/game.session.js';
 import { getUserById } from '../session/user.session.js';
-import { createMonsterData, getAttackedBase, setAttackedBase } from '../model/monster.model.js';
-import { getTotalAttackedDamage } from '../utils/monster.util.js';
+import { createMonsterData, getAttackedBase, setAttackedBase } from '../models/monster.model.js';
+import { getTotalAttackedDamage } from '../utils/monster/monster.util.js';
 
 const monsterAttackBaseHandler = async ({ socket, userId, payload }) => {
   try {

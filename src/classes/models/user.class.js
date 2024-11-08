@@ -1,3 +1,5 @@
+import { INIT_BASE_HP } from "../../constants/game.js";
+
 class User {
   constructor(id, socket) {
     this.id = id;
@@ -6,7 +8,7 @@ class User {
     this.sequence = 0;
     this.score = 0;
     this.gold = 0;
-    this.baseHp = 100; // 게임세션 생성 시 init으로 초기화?
+    this.baseHp = INIT_BASE_HP;
   }
 
   getNextSequence() {

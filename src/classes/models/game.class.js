@@ -1,9 +1,6 @@
 import { config } from '../../config/config.js';
 import {
-  gameOverNotification,
-  updateBaseHpNotification,
-} from '../../utils/notification/game.notification.js';
-import { CANVAS_HEIGH,
+  CANVAS_HEIGH,
   CANVAS_WIDTH,
   INIT_BASE_DATA,
   INIT_BASE_HP,
@@ -11,7 +8,16 @@ import { CANVAS_HEIGH,
   INIT_MONSTER_SPAWN_INTERVAL,
   INIT_TOWER_COST,
 } from '../../constants/game.js';
-import { gameStartNotification } from '../../utils/notification/game.notification.js';
+import {
+  findHighScoreByUserId,
+  findUserIdByAccountId,
+  updateHighScore,
+} from '../../db/user/user.db.js';
+import {
+  gameStartNotification,
+  gameOverNotification,
+  updateBaseHpNotification,
+} from '../../utils/notification/game.notification.js';
 
 class Game {
   constructor(id) {
@@ -46,21 +52,17 @@ class Game {
   }
 
   getOpponentUserId(userId) {
-    const opponentUserId = this.users
-      .filter((user) => user.id !== userId)
-      .map((user) => {
-        return { id: user.id };
-      });
-    return opponentUserId;
+    const opponentUser = this.users.find((user) => user.id !== userId);
+    return opponentUser.id;
   }
 
-  // getUserHighScore(userId) {
-  //   const userData = this.getUser(userId);
-  //   const userHighScore = userData.highScore;
-  //   return userHighScore;
-  // }
+  async getUserHighScore(userId) {
+    const user = this.getUser(userId);
+    const dbUserHighScore = await findHighScoreByUserId(user.id);
+    return dbUserHighScore;
+  }
 
-  startGame(userId) {
+  async startGame(userId) {
     if (this.users.length !== config.game.maxPlayer) {
       return false;
     }
@@ -68,9 +70,9 @@ class Game {
     this.state = config.game.state.playing;
     this.path = this.initMonsterPath(CANVAS_WIDTH, CANVAS_HEIGH);
 
-    // const playerHighScore = this.getUserHighScore(userId);
-    // const opponentUserId = this.getOpponentUserId(userId);
-    // const opponentHighScore = this.getUserHighScore(opponentUserId);
+    const playerHighScore = await this.getUserHighScore(userId);
+    const opponentUserId = this.getOpponentUserId(userId);
+    const opponentHighScore = await this.getUserHighScore(opponentUserId);
 
     const initialGameState = {
       baseHp: INIT_BASE_HP,
@@ -81,7 +83,7 @@ class Game {
     const playerData = {
       gold: INIT_GOLD,
       base: INIT_BASE_DATA,
-      highScore: 0,
+      highScore: playerHighScore,
       towers: [],
       monsters: [],
       monsterLevel: 0,
@@ -92,7 +94,7 @@ class Game {
     const opponentData = {
       gold: INIT_GOLD,
       base: INIT_BASE_DATA,
-      highScore: 0,
+      highScore: opponentHighScore,
       towers: [],
       monsters: [],
       monsterLevel: 0,
@@ -143,6 +145,37 @@ class Game {
 
     return path;
   }
+
+  getAllBaseHp(attackedUserId, attackedUserBaseHp) {
+    this.users.forEach((user) => {
+      let packet = null;
+      if (user.id === attackedUserId) {
+        packet = updateBaseHpNotification(false, attackedUserBaseHp);
+      } else {
+        packet = updateBaseHpNotification(true, attackedUserBaseHp);
+      }
+      user.socket.write(packet);
+    });
+  }
+
+  async gameOver() {
+    for (const user of this.users) {
+      const dbUserId = await findUserIdByAccountId(user.id);
+      const dbHighScore = await findHighScoreByUserId(dbUserId);
+      if (user.score > dbHighScore) {
+        await updateHighScore(user.score, dbUserId);
+      }
+
+      let packet = null;
+      if (user.baseHp > 0) {
+        packet = gameOverNotification(true);
+      } else {
+        packet = gameOverNotification(false);
+      }
+      user.socket.write(packet);
+    }
+  }
+
 }
 
 export default Game;
