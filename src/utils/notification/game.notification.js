@@ -30,10 +30,10 @@ export const addEnemyTowerNotification = (towerId, x, y) => {
   const protoMessages = getProtoMessages();
   const gamePacket = protoMessages.GamePacket;
 
-  const PacketTypeName = PACKET_TYPE_NAMES[PACKET_TYPES.ADD_ENEMY_TOWER_NOTIFICATION];
+  const packetTypeName = PACKET_TYPE_NAMES[PACKET_TYPES.ADD_ENEMY_TOWER_NOTIFICATION];
 
   const payload = {};
-  payload[PacketTypeName] = { towerId, x, y };
+  payload[packetTypeName] = { towerId, x, y };
 
   const addEnemyTowerPacket = gamePacket.encode(payload).finish();
 
