@@ -113,7 +113,7 @@ class Game {
 
   initMonsterPath() {
     const path = [];
-
+    
     let width = 60;
     let angle = 0;
     let isUp = false;
@@ -165,34 +165,6 @@ class Game {
 
     return path;
   }
-  // initMonsterPath(width, height) {
-  //   const path = [];
-  //   let currentX = 0;
-
-  //   const amplitude = height / 3; // 진폭으로 상하 폭 결정
-  //   const frequency = 0.025; // 주파수로 곡률 결정
-  //   const phase = Math.random() * Math.PI * 2; // 위상으로 파형 결정 (시작 지점 변동)
-
-  //   while (currentX <= width) {
-  //     const sineY = height / 2 + amplitude * Math.sin(frequency * currentX + phase);
-  //     const randomYChange = Math.floor(Math.random() * 100) - 50; // -50 ~ 50 범위의 랜덤 변화
-  //     let currentY = sineY + randomYChange;
-
-  //     // y 좌표에 대한 clamp 처리
-  //     if (currentY < 230) {
-  //       currentY = 230;
-  //     }
-  //     if (currentY > height) {
-  //       currentY = height;
-  //     }
-
-  //     path.push({ x: currentX, y: currentY });
-
-  //     currentX += Math.floor(Math.random() * 50) + 20;
-  //   }
-
-  //   return path;
-  // }
 }
 
 export default Game;
