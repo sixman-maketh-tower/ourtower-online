@@ -43,16 +43,12 @@ class Game {
   }
 
   getOpponentUserId(userId) {
-    const opponentUserId = this.users
-      .filter((user) => user.id !== userId)
-      .map((user) => {
-        return { id: user.id };
-      });
-    return opponentUserId;
+    const opponentUser = this.users.find((user) => user.id !== userId);
+    return opponentUser.id;
   }
 
   // getUserHighScore(userId) {
-  //   const userData = this.getUser(userId);
+  //   const userData = getUserById(userId);
   //   const userHighScore = userData.highScore;
   //   return userHighScore;
   // }
@@ -66,7 +62,6 @@ class Game {
     this.path = this.initMonsterPath();
 
     // const playerHighScore = this.getUserHighScore(userId);
-    // const opponentUserId = this.getOpponentUserId(userId);
     // const opponentHighScore = this.getUserHighScore(opponentUserId);
 
     const initialGameState = {
@@ -77,24 +72,24 @@ class Game {
     };
 
     const playerData = {
-      gold: INIT_GOLD,
+      gold: player1.gold,
       base: INIT_BASE_DATA,
       highScore: 0,
-      towers: [],
+      towers: player1.towers,
       monsters: [],
       monsterLevel: 0,
-      score: 0,
+      score: player1.score,
       monsterPath: this.path,
       basePosition: this.path[this.path.length - 1],
     };
     const opponentData = {
-      gold: INIT_GOLD,
+      gold: player2.gold,
       base: INIT_BASE_DATA,
       highScore: 0,
-      towers: [],
+      towers: player2.towers,
       monsters: [],
       monsterLevel: 0,
-      score: 0,
+      score: player2.score,
       monsterPath: this.path,
       basePosition: this.path[this.path.length - 1],
     };
@@ -111,6 +106,7 @@ class Game {
     return true;
   }
 
+  initMonsterPath() {
   initMonsterPath() {
     const path = [];
 
