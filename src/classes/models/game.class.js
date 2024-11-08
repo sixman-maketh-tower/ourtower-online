@@ -68,13 +68,16 @@ class Game {
     this.state = config.game.state.playing;
     this.path = this.initMonsterPath(CANVAS_WIDTH, CANVAS_HEIGH);
 
-    this.getUser(userId).state = config.game.state.playing;
-
     const playerHighScore = await this.getUserHighScore(userId);
 
     const opponentUserId = this.getOpponentUserId(userId);
-    this.getUser(opponentUserId).state = config.game.state.playing;
     const opponentHighScore = await this.getUserHighScore(opponentUserId);
+    
+    this.getUser(userId).state = config.game.state.playing;
+    this.getUser(opponentUserId).state = config.game.state.playing;
+
+    const player1 = this.getUser(userId);
+    const player2 = this.getUser(opponentUserId);
 
     const initialGameState = {
       baseHp: INIT_BASE_HP,
@@ -83,24 +86,24 @@ class Game {
       monsterSpawnInterval: INIT_MONSTER_SPAWN_INTERVAL,
     };
     const playerData = {
-      gold: INIT_GOLD,
+      gold: player1.gold,
       base: INIT_BASE_DATA,
       highScore: playerHighScore,
-      towers: [],
+      towers: player1.towers,
       monsters: [],
       monsterLevel: 0,
-      score: 0,
+      score: player1.score,
       monsterPath: this.path,
       basePosition: this.path[this.path.length - 1],
     };
     const opponentData = {
-      gold: INIT_GOLD,
+      gold: player2.gold,
       base: INIT_BASE_DATA,
       highScore: opponentHighScore,
-      towers: [],
+      towers: player2.towers,
       monsters: [],
       monsterLevel: 0,
-      score: 0,
+      score: player2.score,
       monsterPath: this.path,
       basePosition: this.path[this.path.length - 1],
     };
@@ -116,30 +119,56 @@ class Game {
     return true;
   }
 
-  initMonsterPath(width, height) {
+  initMonsterPath() {
     const path = [];
-    let currentX = 0;
 
-    const amplitude = height / 3; // 진폭으로 상하 폭 결정
-    const frequency = 0.025; // 주파수로 곡률 결정
-    const phase = Math.random() * Math.PI * 2; // 위상으로 파형 결정 (시작 지점 변동)
+    let width = 60;
+    let angle = 0;
+    let isUp = false;
+    const startPosition = { x: 0.0, y: 350.0 };
+    const endPosition = { x: 1350.0, y: 350.0 };
 
-    while (currentX <= width) {
-      const sineY = height / 2 + amplitude * Math.sin(frequency * currentX + phase);
-      const randomYChange = Math.floor(Math.random() * 100) - 50; // -50 ~ 50 범위의 랜덤 변화
-      let currentY = sineY + randomYChange;
+    // 시작 위치와 끝 위치 설정
+    for (let i = 0; i < 4; i++) {
+      angle = i === 0 ? 30 - Math.random() * 60 : Math.random() * 30 + 15;
 
-      // y 좌표에 대한 clamp 처리
-      if (currentY < 230) {
-        currentY = 230;
+      if (i === 3) {
+        // 마지막 road의 각도는 base 위치와의 방향으로 설정
+        const lastRoad = path[path.length - 1];
+        const dx = endPosition.x - lastRoad.x;
+        const dy = endPosition.y - lastRoad.y;
+        const normal = Math.atan2(dy, dx) * (180 / Math.PI);
+        angle = Math.abs(normal);
       }
-      if (currentY > height) {
-        currentY = height;
+
+      isUp = i === 0 ? (angle > 0 ? true : false) : !isUp;
+
+      let newPos = { x: 0, y: 0 };
+      for (let j = 0; j < (i < 3 ? 6 : 10); j++) {
+        const realAngle = i === 0 ? angle : angle * (isUp ? 1 : -1);
+        const rotatePos = {
+          x: Math.cos((realAngle / 180) * Math.PI) * width,
+          y: Math.sin((realAngle / 180) * Math.PI) * width,
+        };
+
+        if (i === 0 && j === 0) {
+          newPos = startPosition;
+        } else if (i !== 0 && j === 0) {
+          newPos.x = path[path.length - 1].x;
+          newPos.y = path[path.length - 1].y;
+        } else {
+          newPos.x = path[path.length - 1].x + rotatePos.x;
+          newPos.y = path[path.length - 1].y + rotatePos.y;
+        }
+
+        console.log(
+          `${i}, ${j} => realAngle: ${realAngle}, rotatePos: {${rotatePos.x}, ${rotatePos.y}}`,
+        );
+
+        console.log(`newPos: {${newPos.x}, ${newPos.y}}`);
+
+        path.push({ x: newPos.x, y: newPos.y });
       }
-
-      path.push({ x: currentX, y: currentY });
-
-      currentX += Math.floor(Math.random() * 50) + 20;
     }
 
     return path;
