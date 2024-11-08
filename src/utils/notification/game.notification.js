@@ -1,9 +1,23 @@
-const makeNotofication = (message, type) => {
-  const packetLength = Buffer.alloc(config.packet.totalLength);
-  packetLength.writeUInt32BE(message.length + config.packet.totalLength + config.packet.typeLength);
+import { getProtoMessages } from '../../init/proto.js';
+import { PACKET_TYPE_NAMES, PACKET_TYPES } from '../../constants/packetTypes.js';
+import { createHeader } from '../header/createHeader.js';
 
-  const packetType = Buffer.alloc(config.packet.typeLength);
-  packetType.writeUInt8(type, 0);
+const makeNotification = (message, type) => {
+  const headerBuffer = createHeader(type, message, 1);
 
-  return Buffer.concat([packetLength, packetType, message]);
+  return Buffer.concat([headerBuffer, message]);
+};
+
+export const gameStartNotification = (initialGameState, playerData, opponentData) => {
+  const protoMessages = getProtoMessages();
+  const gamePacket = protoMessages.GamePacket;
+
+  const startPacketTypeName = PACKET_TYPE_NAMES[PACKET_TYPES.MATCH_START_NOTIFICATION];
+
+  const payload = {};
+  payload[startPacketTypeName] = { initialGameState, playerData, opponentData };
+
+  const startPacket = gamePacket.encode(payload).finish();
+
+  return makeNotification(startPacket, PACKET_TYPES.MATCH_START_NOTIFICATION);
 };
