@@ -42,7 +42,7 @@ export const packetParser = (data, packetType) => {
     );
   }
 
-  console.log(payload);
+  //console.log(payload);
 
   return { payload };
 };

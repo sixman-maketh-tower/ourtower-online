@@ -6,6 +6,7 @@ class User {
     this.sequence = 0;
     this.score = 0;
     this.gold = 0;
+    this.towerUniqueId = 0;
   }
 
   getNextSequence() {

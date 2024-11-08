@@ -4,4 +4,6 @@ export const HANDLER_IDS = {
   REGISTER: 1,
   LOGIN: 3,
   MATCH_REQUEST: 5,
+  SPAWN_MONSTER: 11,
+  ATTACK_MONSTER: 16,
 };

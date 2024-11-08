@@ -5,6 +5,7 @@ import { ErrorCodes } from '../utils/error/errorCodes.js';
 import loginHandler from './login.handler.js';
 import registerHandler from './register.Handler.js';
 import matchingGameHandler from './game/matchingGameHandler.js';
+import spawnMonsterHandler from './spawnMonster.handler.js';
 
 const handlers = {
   [HANDLER_IDS.REGISTER]: {
@@ -21,6 +22,11 @@ const handlers = {
     handler: matchingGameHandler,
     protoType: 'GamePacket',
     protoPayloadType: PACKET_TYPE_NAMES[HANDLER_IDS.MATCH_REQUEST],
+  },
+  [HANDLER_IDS.SPAWN_MONSTER]: {
+    handler: spawnMonsterHandler,
+    protoType: 'GamePacket',
+    protoPayloadType: PACKET_TYPE_NAMES[HANDLER_IDS.SPAWN_MONSTER],
   },
 };
 
