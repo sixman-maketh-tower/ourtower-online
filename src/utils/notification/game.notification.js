@@ -21,20 +21,3 @@ export const gameStartNotification = (initialGameState, playerData, opponentData
 
   return makeNotification(startPacket, PACKET_TYPES.MATCH_START_NOTIFICATION);
 };
-
-export const spawnMonsterNotification = (monsterId, monsterNumber) => {
-  const protoMessages = getProtoMessages();
-  const gamePacket = protoMessages.GamePacket;
-
-  const spawnMonsterTypeName = PACKET_TYPE_NAMES[PACKET_TYPES.SPAWN_ENEMY_MONSTER_NOTIFICATION];
-
-  const payload = {};
-  payload[spawnMonsterTypeName] = {
-    monsterId,
-    monsterNumber,
-  };
-
-  const spawnMonsterPacket = gamePacket.encode(payload).finish();
-
-  return makeNotification(spawnMonsterPacket, PACKET_TYPES.SPAWN_ENEMY_MONSTER_NOTIFICATION);
-};
