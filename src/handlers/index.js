@@ -3,7 +3,8 @@ import { PACKET_TYPE_NAMES } from '../constants/packetTypes.js';
 import { CustomError } from '../utils/error/customError.js';
 import { ErrorCodes } from '../utils/error/errorCodes.js';
 import loginHandler from './login.handler.js';
-import registerHandler from './register.Handler.js';
+import registerHandler from './register.handler.js';
+import towerPurchaseHandler from './tower.handler.js';
 
 const handlers = {
   [HANDLER_IDS.REGISTER]: {
@@ -15,6 +16,11 @@ const handlers = {
     handler: loginHandler,
     protoType: 'GamePacket',
     protoPayloadType: PACKET_TYPE_NAMES[HANDLER_IDS.LOGIN],
+  },
+  [HANDLER_IDS.TOWER_PURCHASE]: {
+    handler: towerPurchaseHandler,
+    protoType: 'GamePacket',
+    protoPayloadType: PACKET_TYPE_NAMES[HANDLER_IDS.TOWER_PURCHASE],
   },
 };
 
