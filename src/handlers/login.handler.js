@@ -23,12 +23,13 @@ const loginHandler = async ({ socket, userId, payload }) => {
     socket.write(loginFailResponse);
   } else {
     // 1-2. 있다면 먼저 비밀번호 검증
-    if (password !== loginUser['password']) {
+    const passwordValidate = await bcrypt.compare(password, loginUser['password']);
+    if (!passwordValidate) {
       const loginFailResponse = createResponse(PACKET_TYPES.LOGIN_RESPONSE, {
         success: false,
         message: 'Fail: Dismatch password',
         token: '',
-        failCode: 2,
+        failCode: 3,
       });
       console.log('Fail: Dismatch password');
       socket.write(loginFailResponse);
