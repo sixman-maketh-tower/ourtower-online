@@ -1,9 +1,8 @@
 class Tower {
-  constructor(x, y, userId, towerId) {
+  constructor(x, y, id) {
+    this.id = id;
     this.x = x;
     this.y = y;
-    this.userId = userId;
-    this.towerId = towerId;// 고유한 무언가... 
     this.beamDuration = 0;
     this.tartget = null;
   }
