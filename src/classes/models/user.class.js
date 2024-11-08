@@ -12,6 +12,7 @@ class User {
     this.towers = [];
     this.gold = config.game.initData.gold;
     this.baseHp = config.game.initData.baseHp;
+    this.towerUniqueId = 0;
     this.state = config.game.state.waiting;
   }
 

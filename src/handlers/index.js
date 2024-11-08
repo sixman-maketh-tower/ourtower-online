@@ -6,6 +6,8 @@ import loginHandler from './login.handler.js';
 import registerHandler from './register.Handler.js';
 import monsterAttackBaseHandler from './monsterAttackBase.handler.js';
 import gameEndHandler from './gameEnd.handler.js';
+import registerHandler from './register.handler.js';
+import towerPurchaseHandler from './tower.handler.js';
 import matchingGameHandler from './game/matchingGameHandler.js';
 import spawnMonsterHandler from './spawnMonster.handler.js';
 
@@ -40,6 +42,11 @@ const handlers = {
     protoType: 'GamePacket',
     protoPaylaodType: PACKET_TYPE_NAMES[HANDLER_IDS.GAME_END],
   }
+  [HANDLER_IDS.TOWER_PURCHASE]: {
+    handler: towerPurchaseHandler,
+    protoType: 'GamePacket',
+    protoPayloadType: PACKET_TYPE_NAMES[HANDLER_IDS.TOWER_PURCHASE],
+  },
 };
 
 export const getHandlerById = (packetType) => {

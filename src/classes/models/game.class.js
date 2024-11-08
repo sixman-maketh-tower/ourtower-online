@@ -121,7 +121,7 @@ class Game {
 
   initMonsterPath() {
     const path = [];
-
+    
     let width = 60;
     let angle = 0;
     let isUp = false;
