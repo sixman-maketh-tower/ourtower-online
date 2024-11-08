@@ -7,6 +7,7 @@ import registerHandler from './register.Handler.js';
 import monsterAttackBaseHandler from './monsterAttackBase.handler.js';
 import gameEndHandler from './gameEnd.handler.js';
 import matchingGameHandler from './game/matchingGameHandler.js';
+import spawnMonsterHandler from './spawnMonster.handler.js';
 
 const handlers = {
   [HANDLER_IDS.REGISTER]: {
@@ -23,6 +24,11 @@ const handlers = {
     handler: matchingGameHandler,
     protoType: 'GamePacket',
     protoPayloadType: PACKET_TYPE_NAMES[HANDLER_IDS.MATCH_REQUEST],
+  },
+  [HANDLER_IDS.SPAWN_MONSTER]: {
+    handler: spawnMonsterHandler,
+    protoType: 'GamePacket',
+    protoPayloadType: PACKET_TYPE_NAMES[HANDLER_IDS.SPAWN_MONSTER],
   },
   [HANDLER_IDS.MONSTER_ATTACK_BASE]: {
     handler: monsterAttackBaseHandler,

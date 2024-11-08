@@ -1,6 +1,6 @@
 import { PACKET_TYPES } from '../constants/packetTypes.js';
 import { createResponse } from '../utils/response/createResponse.js';
-import { findUserByAccountId, createUser, findUserIdByAccountId, createHighScore } from '../db/user/user.db.js';
+import { findUserByAccountId, createUser, createHighScore } from '../db/user/user.db.js';
 
 const registerHandler = async ({ socket, userId, payload }) => {
   const { id, password, email } = payload;
@@ -30,8 +30,8 @@ const registerHandler = async ({ socket, userId, payload }) => {
   socket.write(registerFailResponse);
   } else {
     const regiUser = await createUser(id, password, email);
-    const dbUserId = await findUserIdByAccountId(id);
-    await createHighScore(dbUserId, 0);
+    const dbUser = await findUserByAccountId(id);
+    await createHighScore(dbUser.id, 0);
     console.log(regiUser);
     console.log(await findUserByAccountId(id));
     const registerResponse = createResponse(PACKET_TYPES.REGISTER_RESPONSE, {

@@ -16,11 +16,6 @@ export const updateUserLogin = async (accountId) => {
     await dbPool.query(USER_QUERIES.UPDATE_USER_LOGIN, [accountId]);
 };
 
-export const findUserIdByAccountId = async (accountId) => {
-    const [rows] = await dbPool.query(USER_QUERIES.FIND_USER_BY_ACCOUNT_ID, [accountId]);
-    return rows[0].id;
-};
-
 export const findHighScoreByUserId = async (userId) => {
     const [rows] = await dbPool.query(USER_QUERIES.FIND_HIGHSCORE_BY_USER_ID, [userId]);
     return rows[0].highScore;
@@ -33,5 +28,4 @@ export const createHighScore = async (userId, score) => {
 
 export const updateHighScore = async (userId, score) => {
     await dbPool.query(USER_QUERIES.UPDATE_HIGHSCORE, [userId, score]);
-    return true;
 };

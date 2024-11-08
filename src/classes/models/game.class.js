@@ -10,8 +10,6 @@ import {
 } from '../../constants/game.js';
 import {
   findHighScoreByUserId,
-  findUserIdByAccountId,
-  updateHighScore,
 } from '../../db/user/user.db.js';
 import {
   gameStartNotification,
@@ -70,8 +68,12 @@ class Game {
     this.state = config.game.state.playing;
     this.path = this.initMonsterPath(CANVAS_WIDTH, CANVAS_HEIGH);
 
+    this.getUser(userId).state = config.game.state.playing;
+
     const playerHighScore = await this.getUserHighScore(userId);
+
     const opponentUserId = this.getOpponentUserId(userId);
+    this.getUser(opponentUserId).state = config.game.state.playing;
     const opponentHighScore = await this.getUserHighScore(opponentUserId);
 
     const initialGameState = {
@@ -116,31 +118,28 @@ class Game {
 
   initMonsterPath(width, height) {
     const path = [];
-    let currentX = 10;
-    let currentY = Math.floor(Math.random() * 21) + 400; // 500 ~ 520 범위의 y 시작 (캔버스 y축 중간쯤에서 시작할 수 있도록 유도)
+    let currentX = 0;
 
-    path.push({ x: currentX, y: currentY });
+    const amplitude = height / 3; // 진폭으로 상하 폭 결정
+    const frequency = 0.025; // 주파수로 곡률 결정
+    const phase = Math.random() * Math.PI * 2; // 위상으로 파형 결정 (시작 지점 변동)
 
-    while (currentX < width) {
-      currentX += Math.floor(Math.random() * 100) + 50; // 50 ~ 150 범위의 x 증가
-      // x 좌표에 대한 clamp 처리
-      if (currentX < 0) {
-        currentX = 0;
-      }
-      if (currentX > width) {
-        currentX = width;
-      }
+    while (currentX <= width) {
+      const sineY = height / 2 + amplitude * Math.sin(frequency * currentX + phase);
+      const randomYChange = Math.floor(Math.random() * 100) - 50; // -50 ~ 50 범위의 랜덤 변화
+      let currentY = sineY + randomYChange;
 
-      currentY += Math.floor(Math.random() * 200) - 100; // -100 ~ 100 범위의 y 변경
       // y 좌표에 대한 clamp 처리
-      if (currentY < 0) {
-        currentY = 0;
+      if (currentY < 230) {
+        currentY = 230;
       }
       if (currentY > height) {
         currentY = height;
       }
 
       path.push({ x: currentX, y: currentY });
+
+      currentX += Math.floor(Math.random() * 50) + 20;
     }
 
     return path;
@@ -158,14 +157,9 @@ class Game {
     });
   }
 
-  async gameOver() {
-    for (const user of this.users) {
-      const dbUserId = await findUserIdByAccountId(user.id);
-      const dbHighScore = await findHighScoreByUserId(dbUserId);
-      if (user.score > dbHighScore) {
-        await updateHighScore(user.score, dbUserId);
-      }
+  gameOver() {
 
+    for (const user of this.users) {
       let packet = null;
       if (user.baseHp > 0) {
         packet = gameOverNotification(true);

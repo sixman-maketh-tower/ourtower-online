@@ -1,4 +1,4 @@
-import { INIT_BASE_HP } from "../../constants/game.js";
+import { config } from "../../config/config.js";
 
 class User {
   constructor(id, socket) {
@@ -7,8 +7,9 @@ class User {
     this.lastUpdateTime = Date.now();
     this.sequence = 0;
     this.score = 0;
-    this.gold = 0;
-    this.baseHp = INIT_BASE_HP;
+    this.gold = config.game.initData.gold;
+    this.baseHp = config.game.initData.baseHp;
+    this.state = config.game.state.waiting;
   }
 
   getNextSequence() {
@@ -20,9 +21,6 @@ class User {
     this.lastUpdateTime = Date.now();
   }
 
-  getBaseHp() {
-    return this.baseHp;
-  }
 }
 
 export default User;
