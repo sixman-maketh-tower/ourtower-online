@@ -5,10 +5,9 @@ import { ErrorCodes } from '../utils/error/errorCodes.js';
 import loginHandler from './login.handler.js';
 import monsterAttackBaseHandler from './monsterAttackBase.handler.js';
 import gameEndHandler from './gameEnd.handler.js';
-import registerHandler from './register.handler.js';
+import registerHandler from './register.Handler.js';
 import towerPurchaseHandler from './tower.handler.js';
 import matchingGameHandler from './game/matchingGameHandler.js';
-import spawnMonsterHandler from './spawnMonster.handler.js';
 import spawnMonsterHandler from './spawnMonster.handler.js';
 
 const handlers = {

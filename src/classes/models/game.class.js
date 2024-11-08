@@ -64,10 +64,18 @@ class Game {
     }
 
     this.state = config.game.state.playing;
-    this.path = this.initMonsterPath();
+    this.path = this.initMonsterPath(CANVAS_WIDTH, CANVAS_HEIGH);
 
-    // const playerHighScore = this.getUserHighScore(userId);
-    // const opponentHighScore = this.getUserHighScore(opponentUserId);
+    const playerHighScore = await this.getUserHighScore(userId);
+
+    const opponentUserId = this.getOpponentUserId(userId);
+    const opponentHighScore = await this.getUserHighScore(opponentUserId);
+
+    this.getUser(userId).state = config.game.state.playing;
+    this.getUser(opponentUserId).state = config.game.state.playing;
+
+    const player1 = this.getUser(userId);
+    const player2 = this.getUser(opponentUserId);
 
     const initialGameState = {
       baseHp: INIT_BASE_HP,
