@@ -1,4 +1,3 @@
-import Tower from "../classes/tower.class.js";
 import { PACKET_TYPES } from "../constants/packetTypes.js";
 import { getServerGameAssets } from "../init/assets.js";
 import { getGameSessions } from "../session/game.session.js";
