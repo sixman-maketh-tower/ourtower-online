@@ -43,12 +43,8 @@ class Game {
   }
 
   getOpponentUserId(userId) {
-    const opponentUserId = this.users
-      .filter((user) => user.id !== userId)
-      .map((user) => {
-        return { id: user.id };
-      });
-    return opponentUserId;
+    const opponentUser = this.users.find((user) => user.id !== userId);
+    return opponentUser.id;
   }
 
   // getUserHighScore(userId) {
@@ -109,37 +105,60 @@ class Game {
     return true;
   }
 
-  initMonsterPath(width, height) {
+  initMonsterPath() {
     const path = [];
-    let currentX = 10;
-    let currentY = Math.floor(Math.random() * 21) + 400; // 500 ~ 520 범위의 y 시작 (캔버스 y축 중간쯤에서 시작할 수 있도록 유도)
+    let width = 60;
+    let angle = 0;
+    let isUp = false;
+    const startPosition = { x: 0.0, y: 350.0 };
+    const endPosition = { x: 1350.0, y: 350.0 };
 
-    path.push({ x: currentX, y: currentY });
+    // 시작 위치와 끝 위치 설정
+    for (let i = 0; i < 4; i++) {
+      angle = i === 0 ? 30 - Math.random() * 60 : Math.random() * 30 + 15;
 
-    while (currentX < width) {
-      currentX += Math.floor(Math.random() * 100) + 50; // 50 ~ 150 범위의 x 증가
-      // x 좌표에 대한 clamp 처리
-      if (currentX < 0) {
-        currentX = 0;
-      }
-      if (currentX > width) {
-        currentX = width;
-      }
-
-      currentY += Math.floor(Math.random() * 200) - 100; // -100 ~ 100 범위의 y 변경
-      // y 좌표에 대한 clamp 처리
-      if (currentY < 0) {
-        currentY = 0;
-      }
-      if (currentY > height) {
-        currentY = height;
+      if (i === 3) {
+        // 마지막 road의 각도는 base 위치와의 방향으로 설정
+        const lastRoad = path[path.length - 1];
+        const dx = endPosition.x - lastRoad.x;
+        const dy = endPosition.y - lastRoad.y;
+        const normal = Math.atan2(dy, dx) * (180 / Math.PI);
+        angle = Math.abs(normal);
       }
 
-      path.push({ x: currentX, y: currentY });
+      isUp = i === 0 ? (angle > 0 ? true : false) : !isUp;
+
+      let newPos = { x: 0, y: 0 };
+      for (let j = 0; j < (i < 3 ? 6 : 10); j++) {
+        const realAngle = i === 0 ? angle : angle * (isUp ? 1 : -1);
+        const rotatePos = {
+          x: Math.cos((realAngle / 180) * Math.PI) * width,
+          y: Math.sin((realAngle / 180) * Math.PI) * width,
+        };
+
+        if (i === 0 && j === 0) {
+          newPos = startPosition;
+        } else if (i !== 0 && j === 0) {
+          newPos.x = path[path.length - 1].x;
+          newPos.y = path[path.length - 1].y;
+        } else {
+          newPos.x = path[path.length - 1].x + rotatePos.x;
+          newPos.y = path[path.length - 1].y + rotatePos.y;
+        }
+
+        console.log(
+          `${i}, ${j} => realAngle: ${realAngle}, rotatePos: {${rotatePos.x}, ${rotatePos.y}}`,
+        );
+
+        console.log(`newPos: {${newPos.x}, ${newPos.y}}`);
+
+        path.push({ x: newPos.x, y: newPos.y });
+      }
     }
 
     return path;
   }
+
 }
 
 export default Game;
