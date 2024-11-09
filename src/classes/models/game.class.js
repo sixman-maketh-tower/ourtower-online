@@ -3,7 +3,6 @@ import {
   CANVAS_HEIGH,
   CANVAS_WIDTH,
   INIT_BASE_DATA,
-  INIT_BASE_HP,
   INIT_GOLD,
   INIT_MONSTER_SPAWN_INTERVAL,
   INIT_TOWER_COST,
@@ -95,7 +94,7 @@ class Game {
     const player2 = this.getUser(opponentUserId);
 
     const initialGameState = {
-      baseHp: INIT_BASE_HP,
+      baseHp: INIT_BASE_DATA.maxHp,
       towerCost: INIT_TOWER_COST,
       initialGold: INIT_GOLD,
       monsterSpawnInterval: INIT_MONSTER_SPAWN_INTERVAL,
@@ -151,7 +150,7 @@ class Game {
     let width = 100;
     let angle = 0;
     let isUp = false;
-    const startPosition = { x: 0.0, y: 350.0 };
+    const startPosition = { x: 0.0, y: 240.0 };
     const endPosition = { x: 1350.0, y: 350.0 };
 
     // 시작 위치와 끝 위치 설정

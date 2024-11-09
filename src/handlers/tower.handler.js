@@ -6,6 +6,7 @@ import { getUserBySocket } from '../session/user.session.js';
 import {
   addEnemyTowerNotification,
   enemyTowerAttackNotification,
+  stateSyncNotification,
 } from '../utils/notification/game.notification.js';
 import { createResponse } from '../utils/response/createResponse.js';
 
@@ -81,10 +82,12 @@ export const towerAttackHandler = async ({ socket, userId, payload }) => {
     `[${user.id}] User => Attack : Tower(${userTower.id}) -> Monster(${userMonster.id})`,
   );
 
+  let dieMonster;
   const monsterAlive = userTower.attack(userMonster);
   if (!monsterAlive) {
     const monsterIndex = user.getMonster(monsterId);
-    const dieMonster = user.removeMonster(monsterIndex);
+
+    dieMonster = user.removeMonster(monsterIndex);
     console.log(`${dieMonster.id} Monster Die`);
   }
 
@@ -96,4 +99,12 @@ export const towerAttackHandler = async ({ socket, userId, payload }) => {
   );
 
   opponent.socket.write(towerAttackNotification);
+
+  // 몬스터 사망 시, 유저에게 score를 올려준다.
+  if (!monsterAlive && dieMonster) {
+    user.catchMonster(dieMonster);
+
+    const stateSyncNotificationPacket = stateSyncNotification(user);
+    socket.write(stateSyncNotificationPacket);
+  }
 };

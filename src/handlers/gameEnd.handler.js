@@ -1,5 +1,4 @@
 import { config } from '../config/config.js';
-import { INIT_BASE_DATA, INIT_BASE_HP } from '../constants/game.js';
 import { findHighScoreByUserId } from '../db/user/user.db.js';
 import { clearUserMosnterData } from '../models/monster.model.js';
 import { getGameSessions, removeGame } from '../session/game.session.js';
@@ -15,7 +14,9 @@ const gameEndHandler = async ({ socket, userId, payload }) => {
 
     // 유저가 들어있는 게임 세션을 찾아야함
     const gameSessions = getGameSessions();
-    const gameSession = gameSessions.find((session) => session.users.includes(user));
+    const gameSession = gameSessions.find((session) =>
+      session.users.includes(user),
+    );
 
     if (!gameSession) {
       console.error('Game not found');
@@ -34,7 +35,6 @@ const gameEndHandler = async ({ socket, userId, payload }) => {
 };
 
 export default gameEndHandler;
-
 
 // public void OnGameEnd()
 // {

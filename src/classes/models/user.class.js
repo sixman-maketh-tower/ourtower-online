@@ -75,7 +75,12 @@ class User {
 
   removeMonster(monsterIndex) {
     const removeMonster = this.monsters.splice(monsterIndex, 1)[0];
-    return removeMonster[0];
+    return removeMonster;
+  }
+
+  catchMonster(monster) {
+    this.gold += monster.gold;
+    this.score += monster.score;
   }
 }
 
