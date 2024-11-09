@@ -23,7 +23,9 @@ const monsterAttackBaseHandler = async ({ socket, userId, payload }) => {
 
     // 유저가 들어있는 게임 세션을 찾아야함
     const gameSessions = getGameSessions();
-    const gameSession = gameSessions.find((session) => session.users.includes(user));
+    const gameSession = gameSessions.find((session) =>
+      session.users.includes(user),
+    );
 
     if (gameSession) {
       let userAttackedBase = getAttackedBase(user.id);
@@ -50,6 +52,11 @@ const monsterAttackBaseHandler = async ({ socket, userId, payload }) => {
       // 유저의 기지 체력을 몬스터 공격력만큼 감소
       user.attackedBase(damage);
 
+      /** Debug용 Log : 몬스터 기지 공격*/
+      console.log(
+        `[${user.id}] User => Base Attacked (${user.baseHp})(${damage} Damage)`,
+      );
+
       // 유저의 기지가 받은 피해를 기록
       setAttackedBase(user.id, damage, user.baseHp, Date.now());
 
@@ -59,10 +66,13 @@ const monsterAttackBaseHandler = async ({ socket, userId, payload }) => {
       if (verifyDamage !== getTotalAttackedDamage(user.id)) {
         console.error(`Invalid damage`);
       }
-      console.log(getTotalAttackedDamage(user.id));
+      //console.log(getTotalAttackedDamage(user.id));
+
       gameSession.getAllBaseHp(user.id, user.baseHp);
 
-      const opponentUser = gameSession.users.find((findUser) => findUser.id !== user.id);
+      const opponentUser = gameSession.users.find(
+        (findUser) => findUser.id !== user.id,
+      );
       if (user.baseHp <= 0) {
         if (user.score > (await findHighScoreByUserId(user.id))) {
           await updateHighScore(user.score, user.id);

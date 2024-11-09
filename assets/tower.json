@@ -6,11 +6,7 @@
       "id": 1001,
       "type": "basicTower",
       "attack_power": 40,
-      "range": 300,
-      "cost": 100,
-      "cooldown": 180,
-      "beamDuration": 60,
-      "upgradeCost": 50
+      "cost": 100
     }
   ]
 }

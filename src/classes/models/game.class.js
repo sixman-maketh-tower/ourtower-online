@@ -21,11 +21,15 @@ class Game {
     this.users = [];
     this.state = config.game.state.waiting;
     this.path = [];
+
+    this.monsterUniqueId = 0;
+    this.towerUniqueId = 0;
   }
 
   // Game에 User가 참가
   addUser(user) {
     this.users.push(user);
+    user.gameId = this.id;
 
     if (this.users.length >= config.game.maxPlayer) {
       // throw new Error('게임 인원이 가득 차 참가하실 수 없습니다.');
@@ -34,7 +38,7 @@ class Game {
     if (this.users.length === config.game.maxPlayer) {
       setTimeout(() => {
         this.startGame(user.id);
-      }, 2000);
+      }, 1000);
     }
   }
 
@@ -50,6 +54,19 @@ class Game {
   getOpponentUserId(userId) {
     const opponentUser = this.users.find((user) => user.id !== userId);
     return opponentUser.id;
+  }
+
+  getOpponentUser(userId) {
+    const opponentUser = this.users.find((user) => user.id !== userId);
+    return opponentUser;
+  }
+
+  getUniqueMonsterId() {
+    return this.monsterUniqueId++;
+  }
+
+  getUniqueTowerId() {
+    return this.towerUniqueId++;
   }
 
   async getUserHighScore(userId) {
@@ -90,7 +107,7 @@ class Game {
       highScore: playerHighScore,
       towers: player1.towers,
       monsters: [],
-      monsterLevel: 0,
+      monsterLevel: 1,
       score: player1.score,
       monsterPath: this.path,
       basePosition: this.path[this.path.length - 1],
@@ -101,7 +118,7 @@ class Game {
       highScore: opponentHighScore,
       towers: player2.towers,
       monsters: [],
-      monsterLevel: 0,
+      monsterLevel: 1,
       score: player2.score,
       monsterPath: this.path,
       basePosition: this.path[this.path.length - 1],
@@ -110,8 +127,17 @@ class Game {
     this.users.forEach((user, index) => {
       let startPacket = null;
       if (userId === user.id)
-        startPacket = gameStartNotification(initialGameState, playerData, opponentData);
-      else startPacket = gameStartNotification(initialGameState, opponentData, playerData);
+        startPacket = gameStartNotification(
+          initialGameState,
+          playerData,
+          opponentData,
+        );
+      else
+        startPacket = gameStartNotification(
+          initialGameState,
+          opponentData,
+          playerData,
+        );
 
       user.socket.write(startPacket);
     });
@@ -165,7 +191,9 @@ class Game {
         if (newPos.y > 380) {
           newPos.y = 380;
         }
-        console.log(`(${i}, ${j}) => realAngle: ${realAngle}, newPos: (${newPos.x}, ${newPos.y})`);
+        // console.log(
+        //   `(${i}, ${j}) => realAngle: ${realAngle}, newPos: (${newPos.x}, ${newPos.y})`,
+        // );
         // endPosition에 도달하거나 초과할 때 강제로 마지막 위치를 맞춤
         if (newPos.x >= endPosition.x) {
           path.push({ x: endPosition.x, y: endPosition.y });
