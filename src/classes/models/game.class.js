@@ -130,15 +130,15 @@ class Game {
 
     // 시작 위치와 끝 위치 설정
     for (let i = 0; i < 4; i++) {
-      angle = i === 0 ? -Math.random() * 5 - 10 : Math.random() * 30 + 15;
+      angle = i === 0 ? -Math.random() * 5 - 10 : Math.random() * 30 + 10;
 
       if (i === 3) {
         // 마지막 road의 각도는 base 위치와의 방향으로 설정
         const lastRoad = path[path.length - 1];
         const dx = endPosition.x - lastRoad.x;
         const dy = endPosition.y - lastRoad.y;
-        const normal = Math.atan2(dy, dx) * (Math.PI / 180);
-        angle = Math.abs(normal);
+        const normal = Math.atan2(dy, dx);
+        angle = Math.abs((normal * 180) / Math.PI);
       }
 
       isUp = i === 0 ? (angle > 0 ? true : false) : !isUp;
@@ -147,12 +147,11 @@ class Game {
       for (let j = 0; j < 4; j++) {
         const realAngle = i === 0 && i === 3 ? angle : angle * (isUp ? 1 : -1);
         const rotatePos = {
-          x: Math.cos((realAngle / 180) * Math.PI) * width,
-          y: Math.sin((realAngle / 180) * Math.PI) * width,
+          x: Math.cos((realAngle * Math.PI) / 180) * width,
+          y: Math.sin((realAngle * Math.PI) / 180) * width,
         };
 
         if (i === 0 && j === 0) {
-          console.log(`${i}, ${j} => realAngle: ${realAngle}`);
           newPos = startPosition;
         } else {
           newPos.x = path[path.length - 1].x + rotatePos.x;
