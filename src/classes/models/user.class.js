@@ -65,6 +65,18 @@ class User {
 
     return monster;
   }
+
+  getMonster(monsterId) {
+    const monsterIndex = this.monsters.findIndex(
+      (monster) => monster.id === monsterId,
+    );
+    return monsterIndex;
+  }
+
+  removeMonster(monsterIndex) {
+    const removeMonster = this.monsters.splice(monsterIndex, 1)[0];
+    return removeMonster[0];
+  }
 }
 
 export default User;

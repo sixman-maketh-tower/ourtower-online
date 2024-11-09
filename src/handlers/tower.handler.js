@@ -68,23 +68,25 @@ export const towerAttackHandler = async ({ socket, userId, payload }) => {
 
   const userTower = user.towers.find((tower) => tower.id === towerId);
   if (!userTower) {
-    console.error('Not exist Tower');
+    console.log('Not exist Tower');
   }
 
   const userMonster = user.monsters.find((monster) => monster.id === monsterId);
   if (!userMonster) {
-    console.error('Not exist Monster');
-  }
-
-  const monsterAlive = userTower.attack(userMonster);
-  if (!monsterAlive) {
-    console.log(`${userMonster.id} Monster Die`);
+    console.log('Not exist Monster');
   }
 
   /** Debug용 Log : 타워 공격*/
   console.log(
-    `[${user.id}] User => Attack : Tower(${userTower.id}) -> Monster{${userMonster.id}})`,
+    `[${user.id}] User => Attack : Tower(${userTower.id}) -> Monster(${userMonster.id})`,
   );
+
+  const monsterAlive = userTower.attack(userMonster);
+  if (!monsterAlive) {
+    const monsterIndex = user.getMonster(monsterId);
+    const dieMonster = user.removeMonster(monsterIndex);
+    console.log(`${dieMonster.id} Monster Die`);
+  }
 
   const opponent = game.getOpponentUser(user.id);
 

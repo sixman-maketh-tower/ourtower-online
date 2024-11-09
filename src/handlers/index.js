@@ -9,6 +9,7 @@ import registerHandler from './register.Handler.js';
 import { towerPurchaseHandler, towerAttackHandler } from './tower.handler.js';
 import matchingGameHandler from './game/matchingGameHandler.js';
 import spawnMonsterHandler from './spawnMonster.handler.js';
+import deathMonsterHandler from './monsterDeath.handler.js';
 
 const handlers = {
   [HANDLER_IDS.REGISTER]: {
@@ -49,7 +50,12 @@ const handlers = {
   [HANDLER_IDS.GAME_END]: {
     handler: gameEndHandler,
     protoType: 'GamePacket',
-    protoPaylaodType: PACKET_TYPE_NAMES[HANDLER_IDS.GAME_END],
+    protoPayloadType: PACKET_TYPE_NAMES[HANDLER_IDS.GAME_END],
+  },
+  [HANDLER_IDS.MONSTER_DEATH]: {
+    handler: deathMonsterHandler,
+    protoType: 'GamePacket',
+    protoPayloadType: PACKET_TYPE_NAMES[HANDLER_IDS.MONSTER_DEATH],
   },
 };
 

@@ -116,3 +116,44 @@ export const enemyTowerAttackNotification = (towerId, monsterId) => {
     PACKET_TYPES.ENEMY_TOWER_ATTACK_NOTIFICATION,
   );
 };
+
+export const deathMonsterNotification = (monsterId) => {
+  const protoMessages = getProtoMessages();
+  const gamePacket = protoMessages.GamePacket;
+
+  const packetTypeName =
+    PACKET_TYPE_NAMES[PACKET_TYPES.ENEMY_MONSTER_DEATH_NOTIFICATION];
+
+  const payload = {};
+  payload[packetTypeName] = { monsterId };
+
+  const deathMonsterPacket = gamePacket.encode(payload).finish();
+  return makeNotification(
+    deathMonsterPacket,
+    PACKET_TYPES.ENEMY_MONSTER_DEATH_NOTIFICATION,
+  );
+};
+
+export const stateSyncNotification = (user) => {
+  const protoMessages = getProtoMessages();
+  const gamePacket = protoMessages.GamePacket;
+
+  const packetTypeName =
+    PACKET_TYPE_NAMES[PACKET_TYPES.STATE_SYNC_NOTIFICATION];
+
+  const payload = {};
+  payload[packetTypeName] = {
+    userGold: user.gold,
+    baseHp: user.baseHp,
+    monsterLevel: 1,
+    score: user.score,
+    towers: [],
+    monsters: [],
+  };
+
+  const stateSyncPacket = gamePacket.encode(payload).finish();
+  return makeNotification(
+    stateSyncPacket,
+    PACKET_TYPES.STATE_SYNC_NOTIFICATION,
+  );
+};
