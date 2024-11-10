@@ -1,14 +1,7 @@
 import { config } from '../../config/config.js';
-import {
-  CANVAS_HEIGH,
-  CANVAS_WIDTH,
-  INIT_BASE_DATA,
-  INIT_BASE_HP,
-  INIT_GOLD,
-  INIT_MONSTER_SPAWN_INTERVAL,
-  INIT_TOWER_COST,
-} from '../../constants/game.js';
+import { CANVAS_HEIGH, CANVAS_WIDTH } from '../../constants/game.js';
 import { gameStartNotification } from '../../utils/notification/game.notification.js';
+import { GameState, initialState } from '../../utils/packet/gamePacket.js';
 
 class Game {
   constructor(id) {
@@ -71,34 +64,10 @@ class Game {
     // const playerHighScore = this.getUserHighScore(userId);
     // const opponentHighScore = this.getUserHighScore(opponentUserId);
 
-    const initialGameState = {
-      baseHp: INIT_BASE_HP,
-      towerCost: INIT_TOWER_COST,
-      initialGold: INIT_GOLD,
-      monsterSpawnInterval: INIT_MONSTER_SPAWN_INTERVAL,
-    };
-    const playerData = {
-      gold: player1.gold,
-      base: INIT_BASE_DATA,
-      highScore: 0,
-      towers: player1.towers,
-      monsters: [],
-      monsterLevel: 0,
-      score: player1.score,
-      monsterPath: this.path,
-      basePosition: this.path[this.path.length - 1],
-    };
-    const opponentData = {
-      gold: player2.gold,
-      base: INIT_BASE_DATA,
-      highScore: 0,
-      towers: player2.towers,
-      monsters: [],
-      monsterLevel: 0,
-      score: player2.score,
-      monsterPath: this.path,
-      basePosition: this.path[this.path.length - 1],
-    };
+    const initialGameState = initialState();
+
+    const playerData = GameState(player1, this.path);
+    const opponentData = GameState(player2, this.path);
 
     this.users.forEach((user, index) => {
       let startPacket = null;
@@ -114,51 +83,55 @@ class Game {
   initMonsterPath() {
     const path = [];
 
-    let width = 60;
+    let width = 100;
     let angle = 0;
     let isUp = false;
-    const startPosition = { x: 0.0, y: 350.0 };
+    const startPosition = { x: 0.0, y: 240.0 };
     const endPosition = { x: 1350.0, y: 350.0 };
 
     // 시작 위치와 끝 위치 설정
     for (let i = 0; i < 4; i++) {
-      angle = i === 0 ? 30 - Math.random() * 60 : Math.random() * 30 + 15;
+      angle = i === 0 ? -Math.random() * 5 - 10 : Math.random() * 30 + 10;
 
       if (i === 3) {
         // 마지막 road의 각도는 base 위치와의 방향으로 설정
         const lastRoad = path[path.length - 1];
         const dx = endPosition.x - lastRoad.x;
         const dy = endPosition.y - lastRoad.y;
-        const normal = Math.atan2(dy, dx) * (180 / Math.PI);
-        angle = Math.abs(normal);
+        const normal = Math.atan2(dy, dx);
+        angle = Math.abs((normal * 180) / Math.PI);
       }
 
       isUp = i === 0 ? (angle > 0 ? true : false) : !isUp;
 
       let newPos = { x: 0, y: 0 };
-      for (let j = 0; j < (i < 3 ? 6 : 10); j++) {
-        const realAngle = i === 0 ? angle : angle * (isUp ? 1 : -1);
+      for (let j = 0; j < 4; j++) {
+        const realAngle = i === 0 && i === 3 ? angle : angle * (isUp ? 1 : -1);
         const rotatePos = {
-          x: Math.cos((realAngle / 180) * Math.PI) * width,
-          y: Math.sin((realAngle / 180) * Math.PI) * width,
+          x: Math.cos((realAngle * Math.PI) / 180) * width,
+          y: Math.sin((realAngle * Math.PI) / 180) * width,
         };
 
         if (i === 0 && j === 0) {
           newPos = startPosition;
-        } else if (i !== 0 && j === 0) {
-          newPos.x = path[path.length - 1].x;
-          newPos.y = path[path.length - 1].y;
         } else {
           newPos.x = path[path.length - 1].x + rotatePos.x;
           newPos.y = path[path.length - 1].y + rotatePos.y;
         }
 
-        console.log(
-          `${i}, ${j} => realAngle: ${realAngle}, rotatePos: {${rotatePos.x}, ${rotatePos.y}}`,
-        );
-
-        console.log(`newPos: {${newPos.x}, ${newPos.y}}`);
-
+        // y 좌표에 대한 clamp 처리
+        if (newPos.y < 220) {
+          newPos.y = 220;
+        }
+        if (newPos.y > 380) {
+          newPos.y = 380;
+        }
+        console.log(`(${i}, ${j}) => realAngle: ${realAngle}, newPos: (${newPos.x}, ${newPos.y})`);
+        // endPosition에 도달하거나 초과할 때 강제로 마지막 위치를 맞춤
+        if (newPos.x >= endPosition.x) {
+          path.push({ x: endPosition.x, y: endPosition.y });
+          return path; // 정확히 끝 위치에서 종료
+        }
         path.push({ x: newPos.x, y: newPos.y });
       }
     }

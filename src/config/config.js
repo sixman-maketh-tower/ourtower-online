@@ -20,6 +20,7 @@ import {
   GAME_STATE_PLAYING,
   GAME_STATE_WAITING,
   INIT_BASE_HP,
+  INIT_BASE_MAX_HP,
   INIT_GOLD,
   INIT_MONSTER_SPAWN_INTERVAL,
   INIT_TOWER_COST,
@@ -55,6 +56,10 @@ export const config = {
     canvas: {
       width: CANVAS_WIDTH,
       height: CANVAS_HEIGH,
+    },
+    baseData: {
+      hp: INIT_BASE_HP,
+      maxHp: INIT_BASE_MAX_HP,
     },
   },
   database: {
