@@ -1,6 +1,7 @@
 import Tower from './tower.class.js';
 import { config } from '../../config/config.js';
 import Monster from './monster.class.js';
+import { MAX_MONSTER_LEVEL } from '../../constants/game.js';
 
 class User {
   constructor(id, socket) {
@@ -18,7 +19,6 @@ class User {
 
     this.towers = [];
     this.monsters = [];
-
   }
 
   init() {
@@ -53,16 +53,17 @@ class User {
   }
 
   spawnMonster(id, monsterData) {
-    const monster = new Monster(id, monsterData);
+    // 몬스터 레벨은 1 ~ 10 중 랜덤한 수치
+    const randomLevel = Math.floor(Math.random() * config.game.maxMonsterLevel) + 1;
+    console.log(`randomLevel: ${randomLevel}, ${config.game.maxMonsterLevel}`);
+    const monster = new Monster(id, randomLevel, monsterData);
     this.monsters.push(monster);
 
     return monster;
   }
 
   getMonster(monsterId) {
-    const monsterIndex = this.monsters.findIndex(
-      (monster) => monster.id === monsterId,
-    );
+    const monsterIndex = this.monsters.findIndex((monster) => monster.id === monsterId);
     return monsterIndex;
   }
 

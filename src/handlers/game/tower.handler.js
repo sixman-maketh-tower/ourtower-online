@@ -25,8 +25,7 @@ export const towerPurchaseHandler = async ({ socket, payload }) => {
 
   const game = getGame(user.gameId);
 
-  if(!game)
-    return;
+  if (!game) return;
 
   const towerUniqueId = game.getUniqueTowerId();
   const towerData = towers.data[0];
@@ -39,21 +38,14 @@ export const towerPurchaseHandler = async ({ socket, payload }) => {
   console.log(`[${user.id}] User => Purchase Tower (${user.towers.length})`);
 
   // 요청한 유저에게 타워 구매 응답
-  const towerPurchaseResponse = createResponse(
-    PACKET_TYPES.TOWER_PURCHASE_RESPONSE,
-    {
-      towerId: newTower.id,
-    },
-  );
+  const towerPurchaseResponse = createResponse(PACKET_TYPES.TOWER_PURCHASE_RESPONSE, {
+    towerId: newTower.id,
+  });
   socket.write(towerPurchaseResponse);
 
   const enemy = game.getOpponentUser(user.id);
   // 상대방 유저에게 타워 구매 중계
-  const enemyTowerAddNotification = addEnemyTowerNotification(
-    newTower.id,
-    x,
-    y,
-  );
+  const enemyTowerAddNotification = addEnemyTowerNotification(newTower.id, x, y);
   enemy.socket.write(enemyTowerAddNotification);
 };
 
@@ -63,8 +55,7 @@ export const towerAttackHandler = async ({ socket, userId, payload }) => {
   const user = getUserBySocket(socket);
   const game = getGame(user.gameId);
 
-  if(!game)
-    return;
+  if (!game) return;
 
   const userTower = user.towers.find((tower) => tower.id === towerId);
   if (!userTower) {
@@ -73,13 +64,11 @@ export const towerAttackHandler = async ({ socket, userId, payload }) => {
 
   const userMonster = user.monsters.find((monster) => monster.id === monsterId);
   if (!userMonster) {
-    console.log('Not exist Monster');
+    return;
   }
 
   /** Debug용 Log : 타워 공격*/
-  console.log(
-    `[${user.id}] User => Attack : Tower(${userTower.id}) -> Monster(${userMonster.id})`,
-  );
+  console.log(`[${user.id}] User => Attack : Tower(${userTower.id}) -> Monster(${userMonster.id})`);
 
   let dieMonster;
   const monsterAlive = userTower.attack(userMonster);
@@ -92,10 +81,7 @@ export const towerAttackHandler = async ({ socket, userId, payload }) => {
 
   const opponent = game.getOpponentUser(user.id);
 
-  const towerAttackNotification = enemyTowerAttackNotification(
-    towerId,
-    monsterId,
-  );
+  const towerAttackNotification = enemyTowerAttackNotification(towerId, monsterId);
 
   opponent.socket.write(towerAttackNotification);
 
@@ -103,9 +89,7 @@ export const towerAttackHandler = async ({ socket, userId, payload }) => {
   if (!monsterAlive && dieMonster) {
     user.catchMonster(dieMonster);
     /** Debug용 Log : 타워 공격*/
-  console.log(
-    `[${user.id}] User : Score => ${user.score}!!!!!!!!!!!!!!!!!!!!!!!!!!!`,
-  );
+    console.log(`[${user.id}] User : Score => ${user.score}!!!!!!!!!!!!!!!!!!!!!!!!!!!`);
 
     const stateSyncNotificationPacket = stateSyncNotification(game, user);
     socket.write(stateSyncNotificationPacket);

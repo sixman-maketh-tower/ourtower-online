@@ -9,16 +9,11 @@ const makeNotification = (message, type) => {
   return Buffer.concat([headerBuffer, message]);
 };
 
-export const gameStartNotification = (
-  initialGameState,
-  playerData,
-  opponentData,
-) => {
+export const gameStartNotification = (initialGameState, playerData, opponentData) => {
   const protoMessages = getProtoMessages();
   const gamePacket = protoMessages.GamePacket;
 
-  const startPacketTypeName =
-    PACKET_TYPE_NAMES[PACKET_TYPES.MATCH_START_NOTIFICATION];
+  const startPacketTypeName = PACKET_TYPE_NAMES[PACKET_TYPES.MATCH_START_NOTIFICATION];
 
   const payload = {};
   payload[startPacketTypeName] = { initialGameState, playerData, opponentData };
@@ -28,42 +23,35 @@ export const gameStartNotification = (
   return makeNotification(startPacket, PACKET_TYPES.MATCH_START_NOTIFICATION);
 };
 
-export const spawnMonsterNotification = (monsterId, monsterNumber) => {
+export const spawnMonsterNotification = (monsterId, monsterNumber, monsterLevel) => {
   const protoMessages = getProtoMessages();
   const gamePacket = protoMessages.GamePacket;
 
-  const spawnMonsterTypeName =
-    PACKET_TYPE_NAMES[PACKET_TYPES.SPAWN_ENEMY_MONSTER_NOTIFICATION];
+  const spawnMonsterTypeName = PACKET_TYPE_NAMES[PACKET_TYPES.SPAWN_ENEMY_MONSTER_NOTIFICATION];
 
   const payload = {};
   payload[spawnMonsterTypeName] = {
     monsterId,
     monsterNumber,
+    monsterLevel,
   };
 
   const spawnMonsterPacket = gamePacket.encode(payload).finish();
 
-  return makeNotification(
-    spawnMonsterPacket,
-    PACKET_TYPES.SPAWN_ENEMY_MONSTER_NOTIFICATION,
-  );
+  return makeNotification(spawnMonsterPacket, PACKET_TYPES.SPAWN_ENEMY_MONSTER_NOTIFICATION);
 };
 
 export const updateBaseHpNotification = (isOpponent, baseHp) => {
   const protoMessages = getProtoMessages();
   const packetStructure = protoMessages.GamePacket;
-  const packetTypeName =
-    PACKET_TYPE_NAMES[PACKET_TYPES.UPDATE_BASE_HP_NOTIFICATION];
+  const packetTypeName = PACKET_TYPE_NAMES[PACKET_TYPES.UPDATE_BASE_HP_NOTIFICATION];
 
   const updateHpPayload = {};
   updateHpPayload[packetTypeName] = { isOpponent, baseHp };
 
   const payloadBuffer = packetStructure.encode(updateHpPayload).finish();
 
-  return makeNotification(
-    payloadBuffer,
-    PACKET_TYPES.UPDATE_BASE_HP_NOTIFICATION,
-  );
+  return makeNotification(payloadBuffer, PACKET_TYPES.UPDATE_BASE_HP_NOTIFICATION);
 };
 
 export const gameOverNotification = (isWin) => {
@@ -86,60 +74,47 @@ export const addEnemyTowerNotification = (towerId, x, y) => {
   const protoMessages = getProtoMessages();
   const gamePacket = protoMessages.GamePacket;
 
-  const packetTypeName =
-    PACKET_TYPE_NAMES[PACKET_TYPES.ADD_ENEMY_TOWER_NOTIFICATION];
+  const packetTypeName = PACKET_TYPE_NAMES[PACKET_TYPES.ADD_ENEMY_TOWER_NOTIFICATION];
 
   const payload = {};
   payload[packetTypeName] = { towerId, x, y };
 
   const addEnemyTowerPacket = gamePacket.encode(payload).finish();
 
-  return makeNotification(
-    addEnemyTowerPacket,
-    PACKET_TYPES.ADD_ENEMY_TOWER_NOTIFICATION,
-  );
+  return makeNotification(addEnemyTowerPacket, PACKET_TYPES.ADD_ENEMY_TOWER_NOTIFICATION);
 };
 
 export const enemyTowerAttackNotification = (towerId, monsterId) => {
   const protoMessages = getProtoMessages();
   const gamePacket = protoMessages.GamePacket;
 
-  const packetTypeName =
-    PACKET_TYPE_NAMES[PACKET_TYPES.ENEMY_TOWER_ATTACK_NOTIFICATION];
+  const packetTypeName = PACKET_TYPE_NAMES[PACKET_TYPES.ENEMY_TOWER_ATTACK_NOTIFICATION];
 
   const payload = {};
   payload[packetTypeName] = { towerId, monsterId };
 
   const enemyTowerAttackPacket = gamePacket.encode(payload).finish();
-  return makeNotification(
-    enemyTowerAttackPacket,
-    PACKET_TYPES.ENEMY_TOWER_ATTACK_NOTIFICATION,
-  );
+  return makeNotification(enemyTowerAttackPacket, PACKET_TYPES.ENEMY_TOWER_ATTACK_NOTIFICATION);
 };
 
 export const deathMonsterNotification = (monsterId) => {
   const protoMessages = getProtoMessages();
   const gamePacket = protoMessages.GamePacket;
 
-  const packetTypeName =
-    PACKET_TYPE_NAMES[PACKET_TYPES.ENEMY_MONSTER_DEATH_NOTIFICATION];
+  const packetTypeName = PACKET_TYPE_NAMES[PACKET_TYPES.ENEMY_MONSTER_DEATH_NOTIFICATION];
 
   const payload = {};
   payload[packetTypeName] = { monsterId };
 
   const deathMonsterPacket = gamePacket.encode(payload).finish();
-  return makeNotification(
-    deathMonsterPacket,
-    PACKET_TYPES.ENEMY_MONSTER_DEATH_NOTIFICATION,
-  );
+  return makeNotification(deathMonsterPacket, PACKET_TYPES.ENEMY_MONSTER_DEATH_NOTIFICATION);
 };
 
 export const stateSyncNotification = (game, user) => {
   const protoMessages = getProtoMessages();
   const gamePacket = protoMessages.GamePacket;
 
-  const packetTypeName =
-    PACKET_TYPE_NAMES[PACKET_TYPES.STATE_SYNC_NOTIFICATION];
+  const packetTypeName = PACKET_TYPE_NAMES[PACKET_TYPES.STATE_SYNC_NOTIFICATION];
 
   const payload = {};
   payload[packetTypeName] = {
@@ -152,8 +127,5 @@ export const stateSyncNotification = (game, user) => {
   };
 
   const stateSyncPacket = gamePacket.encode(payload).finish();
-  return makeNotification(
-    stateSyncPacket,
-    PACKET_TYPES.STATE_SYNC_NOTIFICATION,
-  );
+  return makeNotification(stateSyncPacket, PACKET_TYPES.STATE_SYNC_NOTIFICATION);
 };

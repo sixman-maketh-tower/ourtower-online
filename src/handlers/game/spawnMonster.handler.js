@@ -13,8 +13,7 @@ const spawnMonsterHandler = async ({ socket, payload }) => {
   const user = getUserBySocket(socket);
   const game = getGame(user.gameId);
 
-  if(!game)
-    return;
+  if (!game) return;
 
   const monsterId = game.getUniqueMonsterId();
 
@@ -22,13 +21,11 @@ const spawnMonsterHandler = async ({ socket, payload }) => {
 
   const spawnMonster = user.spawnMonster(monsterId, monsterData);
 
-  const spawnMonsterResponse = createResponse(
-    PACKET_TYPES.SPAWN_MONSTER_RESPONSE,
-    {
-      monsterId: spawnMonster.id,
-      monsterNumber: spawnMonster.type,
-    },
-  );
+  const spawnMonsterResponse = createResponse(PACKET_TYPES.SPAWN_MONSTER_RESPONSE, {
+    monsterId: spawnMonster.id,
+    monsterNumber: spawnMonster.type,
+    monsterLevel: spawnMonster.level,
+  });
 
   /** Debug용 Log : 몬스터 스폰*/
   console.log(`[${user.id}] User => Spawn Monster (${monsterId})`);
@@ -40,6 +37,7 @@ const spawnMonsterHandler = async ({ socket, payload }) => {
   const spawnMonsterNotificationPacket = spawnMonsterNotification(
     spawnMonster.id,
     spawnMonster.type,
+    spawnMonster.level,
   );
   opponent.socket.write(spawnMonsterNotificationPacket);
 };
