@@ -37,13 +37,14 @@ export const loadProtos = async () => {
   try {
     const root = new protobuf.Root();
 
-    // 모든 proto 데이터들을 root 하위 Node에 로딩한다.
+    // 모든 proto 파일들을 root 하위 Node에 로딩한다.
     await Promise.all(protoFiles.map((file) => root.load(file)));
 
-    for (const typeName of Object.values(packetNames)) {
-      protoMessages[typeName] = root.lookupType(typeName);
+    for (const packetName of Object.values(packetNames)) {
+      protoMessages[packetName] = root.lookupType(packetName);
     }
 
+    console.log(protoMessages);
     console.log(`ProtoBuf 파일 로드에 성공하였습니다.`);
   } catch (err) {
     console.error(`ProtoBuf 파일 로드 중 오류가 발생했습니다: ${err}`);

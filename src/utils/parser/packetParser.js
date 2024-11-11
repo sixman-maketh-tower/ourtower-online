@@ -1,13 +1,12 @@
-import {
-  getProtoPayloadTypeById,
-  getProtoTypeById,
-} from '../../handlers/index.js';
+import { getProtoTypeById } from '../../handlers/index.js';
 import { getProtoMessages } from '../../init/proto.js';
 import { CustomError } from '../error/customError.js';
 import { ErrorCodes } from '../error/errorCodes.js';
 
 export const packetParser = (data, packetType) => {
   const protoMessages = getProtoMessages();
+
+  //console.log(data);
 
   const protoTypeName = getProtoTypeById(packetType);
   // protoTypeName 검증
@@ -18,17 +17,15 @@ export const packetParser = (data, packetType) => {
     );
   }
 
-  // load한 protoMesages 들 중 protoTypeName에 맞는 message 틀을 가져온다.
   const payloadTypeStructure = protoMessages[protoTypeName];
 
-  // message 틀의 oneof payload를 payloadType에 해당하는 message을 가져온다.
-  const payloadTypeName = getProtoPayloadTypeById(packetType);
+  //console.log(protoTypeName);
 
   let payload;
 
-  // packetType에 해당하는 message구조로 data를 Decode 해준다.
+  // protoType에 해당하는 proto 구조로 Decodeing 해준다.
   try {
-    payload = payloadTypeStructure.decode(data)[payloadTypeName];
+    payload = payloadTypeStructure.decode(data);
   } catch (err) {
     throw new CustomError(
       ErrorCodes.PACKET_DECODE_ERROR,
@@ -36,7 +33,9 @@ export const packetParser = (data, packetType) => {
     );
   }
 
-  // // verify 과정은 이미 위의 decode 함수 내부에서 자체적으로 수행되지만, 우선 구현은 해놓는다.
+  console.log(payload);
+
+  // verify 과정은 이미 위의 decode 함수 내부에서 자체적으로 수행되지만, 우선 구현은 해놓는다.
   const errorMessage = payloadTypeStructure.verify(payload);
   if (errorMessage) {
     throw new CustomError(
@@ -44,8 +43,6 @@ export const packetParser = (data, packetType) => {
       `페이로드 구조가 타입과 일치하지 않습니다. : ${err.message}`,
     );
   }
-
-  //console.log(payload);
 
   return { payload };
 };
