@@ -1,4 +1,5 @@
 import { config } from '../config/config.js';
+import { PACKET_TYPES } from '../constants/packetTypes.js';
 import { getHandlerById } from '../handlers/index.js';
 import { handlerError } from '../utils/error/errorHandler.js';
 import { packetParser } from '../utils/parser/packetParser.js';
@@ -21,39 +22,48 @@ export const onData = (socket) => async (data) => {
     // 패킷의 타입 : Offset [0] 부터 2 바이트
     const packetType = socket.buffer.readUInt16BE(0);
 
-    const payloadLengthOffset =
+    const payloadOffset =
       config.packet.typeLength +
       config.packet.versionLength +
       versionLength +
       config.packet.sequenceLength;
 
-    // 페이로드의 길이 : Offset [payloadOffset] 부터 4 바이트
-    const payloadLength = socket.buffer.readUInt32BE(payloadLengthOffset);
+    // 패킷의 길이 : Offset [0] 부터 12 바이트
+    const payloadLength = socket.buffer.readUInt32BE(payloadOffset);
 
-    // 패킷의 길이 : Header + payload
-    const packetLength = totalHeaderLength + payloadLength;
+    const length = payloadLength + totalHeaderLength;
 
-    // 아직 패킷의 페이로드가 도착하지 않았으므로, 다음을 기약한다.
-    if (socket.buffer.length < packetLength) {
+    // 아직 전체 패킷이 수신되지 않았으므로, 다음을 기약한다.
+    if (socket.buffer.length < length) {
       break;
     }
 
-    // socket.buffer에서 현재 패킷의 페이로드를 slice해준다.
-    const packet = socket.buffer.slice(totalHeaderLength, packetLength);
-
+    // socket.buffer를 패킷(Payload) 한 개의 길이만큼 잘라준다.
+    const packet = socket.buffer.slice(totalHeaderLength, length);
     // socket.buffer에서 꺼낸 패킷의 길이만큼 잘라준다.
-    socket.buffer = socket.buffer.slice(packetLength);
+    socket.buffer = socket.buffer.slice(length);
 
     try {
-      // packet을 packetType의 message 형태로 Parsing한다.
-      const { payload } = packetParser(packet, packetType);
+      switch (packetType) {
+        case PACKET_TYPES.REGISTER_REQUEST:
+          {
+            const { payload } = packetParser(packet, packetType);
 
-      //console.log(`Packet Type: ${packetType}, Payload: ${payload}`);
+            console.log(`Packet Type: ${packetType}, Payload: ${payload}`);
+          }
+          break;
+        case PACKET_TYPES.LOGIN_REQUEST:
+          {
+            const { payload } = packetParser(packet, packetType);
 
-      // packetType에 맞는 핸들러를 얻어온다.
-      const handler = getHandlerById(packetType);
+            console.log(`Packet Type: ${packetType}, Payload: ${payload}`);
 
-      await handler({ socket, userId: 4, payload });
+            //const handler = getHandlerById(packetType);
+
+            //await handler({ socket, userId, payload });
+          }
+          break;
+      }
     } catch (err) {
       handlerError(socket, err);
     }

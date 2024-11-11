@@ -9,18 +9,10 @@ export const addGame = (id) => {
   return game;
 };
 
-export const findWaitingGame = () => {
-  const waitingGame = gameSessions.find((game) => game.state === 'waiting');
-  return waitingGame;
-};
-
 // 게임을 gameSessions에서 삭제하는 함수
 export const removeGame = (id) => {
   const gameIndex = gameSessions.findIndex((game) => game.id === id);
-
   if (gameIndex !== -1) {
-    gameSessions[gameIndex].intervalManager.removeMonsterTypeInterval(gameSessions[gameIndex].id);
-
     return gameSessions.splice(gameIndex, 1)[0];
   }
 };
