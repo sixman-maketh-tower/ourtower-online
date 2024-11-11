@@ -15,14 +15,13 @@ import {
   SEQUENCE_LENGTH,
 } from '../constants/packetTypes.js';
 import {
-  CANVAS_HEIGH,
-  CANVAS_WIDTH,
   GAME_STATE_PLAYING,
   GAME_STATE_WAITING,
   INIT_BASE_DATA,
   INIT_GOLD,
   INIT_MONSTER_SPAWN_INTERVAL,
   INIT_TOWER_COST,
+  MAX_MONSTER_LEVEL,
   MAX_PLAYER,
 } from '../constants/game.js';
 
@@ -52,11 +51,8 @@ export const config = {
       gold: INIT_GOLD,
       monsterSpawnInterval: INIT_MONSTER_SPAWN_INTERVAL,
     },
-    canvas: {
-      width: CANVAS_WIDTH,
-      height: CANVAS_HEIGH,
-    },
     baseData: INIT_BASE_DATA,
+    maxMonsterLevel: MAX_MONSTER_LEVEL,
   },
   database: {
     database: DB_NAME,

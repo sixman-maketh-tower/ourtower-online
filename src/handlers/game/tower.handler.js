@@ -1,16 +1,15 @@
-import { INIT_MONSTER_SPAWN_INTERVAL } from '../constants/game.js';
-import { PACKET_TYPES } from '../constants/packetTypes.js';
-import { getServerGameAssets } from '../init/assets.js';
-import { getGame } from '../session/game.session.js';
-import { getUserBySocket } from '../session/user.session.js';
+import { PACKET_TYPES } from '../../constants/packetTypes.js';
+import { getServerGameAssets } from '../../init/assets.js';
+import { getGame } from '../../session/game.session.js';
+import { getUserBySocket } from '../../session/user.session.js';
 import {
   addEnemyTowerNotification,
   enemyTowerAttackNotification,
   stateSyncNotification,
-} from '../utils/notification/game.notification.js';
-import { createResponse } from '../utils/response/createResponse.js';
+} from '../../utils/notification/game.notification.js';
+import { createResponse } from '../../utils/response/createResponse.js';
 
-export const towerPurchaseHandler = async ({ socket, userId, payload }) => {
+export const towerPurchaseHandler = async ({ socket, payload }) => {
   // 유저가 접속한 게임세션 찾기
   // 게임에 속한 유저 데이터 중 towers 배열에 구매요청한 타워 추가
   // 타워구매 응답패킷 만들어 클라이언트에 반환
@@ -26,8 +25,7 @@ export const towerPurchaseHandler = async ({ socket, userId, payload }) => {
 
   const game = getGame(user.gameId);
 
-  if(!game)
-    return;
+  if (!game) return;
 
   const towerUniqueId = game.getUniqueTowerId();
   const towerData = towers.data[0];
@@ -40,21 +38,14 @@ export const towerPurchaseHandler = async ({ socket, userId, payload }) => {
   console.log(`[${user.id}] User => Purchase Tower (${user.towers.length})`);
 
   // 요청한 유저에게 타워 구매 응답
-  const towerPurchaseResponse = createResponse(
-    PACKET_TYPES.TOWER_PURCHASE_RESPONSE,
-    {
-      towerId: newTower.id,
-    },
-  );
+  const towerPurchaseResponse = createResponse(PACKET_TYPES.TOWER_PURCHASE_RESPONSE, {
+    towerId: newTower.id,
+  });
   socket.write(towerPurchaseResponse);
 
   const enemy = game.getOpponentUser(user.id);
   // 상대방 유저에게 타워 구매 중계
-  const enemyTowerAddNotification = addEnemyTowerNotification(
-    newTower.id,
-    x,
-    y,
-  );
+  const enemyTowerAddNotification = addEnemyTowerNotification(newTower.id, x, y);
   enemy.socket.write(enemyTowerAddNotification);
 };
 
@@ -64,14 +55,7 @@ export const towerAttackHandler = async ({ socket, userId, payload }) => {
   const user = getUserBySocket(socket);
   const game = getGame(user.gameId);
 
-  if(!game)
-    return;
-
-  // console.log('--------------------------------------------');
-  // console.log(towerId, monsterId, user.id);
-  // console.log(user.towers);
-  // console.log(user.monsters);
-  // console.log('--------------------------------------------');
+  if (!game) return;
 
   const userTower = user.towers.find((tower) => tower.id === towerId);
   if (!userTower) {
@@ -80,13 +64,11 @@ export const towerAttackHandler = async ({ socket, userId, payload }) => {
 
   const userMonster = user.monsters.find((monster) => monster.id === monsterId);
   if (!userMonster) {
-    console.log('Not exist Monster');
+    return;
   }
 
   /** Debug용 Log : 타워 공격*/
-  console.log(
-    `[${user.id}] User => Attack : Tower(${userTower.id}) -> Monster(${userMonster.id})`,
-  );
+  console.log(`[${user.id}] User => Attack : Tower(${userTower.id}) -> Monster(${userMonster.id})`);
 
   let dieMonster;
   const monsterAlive = userTower.attack(userMonster);
@@ -99,10 +81,7 @@ export const towerAttackHandler = async ({ socket, userId, payload }) => {
 
   const opponent = game.getOpponentUser(user.id);
 
-  const towerAttackNotification = enemyTowerAttackNotification(
-    towerId,
-    monsterId,
-  );
+  const towerAttackNotification = enemyTowerAttackNotification(towerId, monsterId);
 
   opponent.socket.write(towerAttackNotification);
 
@@ -110,9 +89,7 @@ export const towerAttackHandler = async ({ socket, userId, payload }) => {
   if (!monsterAlive && dieMonster) {
     user.catchMonster(dieMonster);
     /** Debug용 Log : 타워 공격*/
-  console.log(
-    `[${user.id}] User : Score => ${user.score}!!!!!!!!!!!!!!!!!!!!!!!!!!!`,
-  );
+    console.log(`[${user.id}] User : Score => ${user.score}!!!!!!!!!!!!!!!!!!!!!!!!!!!`);
 
     const stateSyncNotificationPacket = stateSyncNotification(game, user);
     socket.write(stateSyncNotificationPacket);

@@ -1,7 +1,7 @@
-import { addEnemyTowerNotification } from '../../utils/notification/game.notification.js';
 import Tower from './tower.class.js';
 import { config } from '../../config/config.js';
 import Monster from './monster.class.js';
+import { MAX_MONSTER_LEVEL } from '../../constants/game.js';
 
 class User {
   constructor(id, socket) {
@@ -9,37 +9,32 @@ class User {
     this.socket = socket;
     this.sequence = 0;
     this.lastUpdateTime = Date.now();
+
     this.state = config.game.state.waiting;
     this.gameId = null;
     this.gold = config.game.initData.gold;
     this.baseHp = config.game.initData.baseHp;
     this.score = 0;
+    this.winLose = true;
+
     this.towers = [];
     this.monsters = [];
-    this.winLose = true;
   }
 
   init() {
     this.state = config.game.state.waiting;
-    this.winLose = true;
-    //this.gameId = null;
-
     this.gold = config.game.initData.gold;
     this.baseHp = config.game.initData.baseHp;
     this.score = 0;
+    this.winLose = true;
 
     this.towers = [];
-
     this.monsters = [];
   }
 
   getNextSequence() {
     return ++this.sequence;
   }
-
-  initializeTower = () => {
-    this.towers = [];
-  };
 
   getAllTowers = () => {
     return this.towers;
@@ -58,16 +53,17 @@ class User {
   }
 
   spawnMonster(id, monsterData) {
-    const monster = new Monster(id, monsterData);
+    // 몬스터 레벨은 1 ~ 10 중 랜덤한 수치
+    const randomLevel = Math.floor(Math.random() * config.game.maxMonsterLevel) + 1;
+    console.log(`randomLevel: ${randomLevel}, ${config.game.maxMonsterLevel}`);
+    const monster = new Monster(id, randomLevel, monsterData);
     this.monsters.push(monster);
 
     return monster;
   }
 
   getMonster(monsterId) {
-    const monsterIndex = this.monsters.findIndex(
-      (monster) => monster.id === monsterId,
-    );
+    const monsterIndex = this.monsters.findIndex((monster) => monster.id === monsterId);
     return monsterIndex;
   }
 
