@@ -1,13 +1,14 @@
 import { config } from '../../config/config.js';
 
-export const GameState = (user, path) => {
+export const GameState = (user, path, highScore) => {
   const player = user;
   const pathData = path;
+  const playerHighScore = highScore;
 
   const playerData = {
     gold: player.gold,
     base: config.game.baseData,
-    highScore: 0,
+    highScore: playerHighScore,
     towers: player.towers,
     monsters: [],
     monsterLevel: 0,

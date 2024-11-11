@@ -1,6 +1,5 @@
 import { config } from '../../config/config.js';
 import { CANVAS_HEIGH, CANVAS_WIDTH } from '../../constants/game.js';
-import { gameStartNotification } from '../../utils/notification/game.notification.js';
 import { GameState, initialState } from '../../utils/packet/gamePacket.js';
 import { findHighScoreByUserId } from '../../db/user/user.db.js';
 import {
@@ -72,8 +71,8 @@ class Game {
     const player2 = this.getUser(opponentUserId);
 
     const initialGameState = initialState();
-    const playerData = GameState(player1, this.path);
-    const opponentData = GameState(player2, this.path);
+    const playerData = GameState(player1, this.path, playerHighScore);
+    const opponentData = GameState(player2, this.path, opponentHighScore);
 
     this.users.forEach((user, index) => {
       let startPacket = null;
