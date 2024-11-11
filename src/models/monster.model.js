@@ -7,6 +7,11 @@ export const createMonsterData = (userId) => {
   userMonsterData[userId]['attackedBase'] = [];
 };
 
+// 유저의 몬스터 기록 데이터 조회
+export const getUserMosnterData = (userId) => {
+  return userMonsterData[userId];
+}
+
 // 몬스터가 기지에서 자폭한 데이터 조회
 export const getAttackedBase = (userId) => {
   if (!userMonsterData[userId]) {
