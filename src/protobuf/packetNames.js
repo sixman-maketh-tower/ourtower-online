@@ -1,3 +1,3 @@
 export const packetNames = {
-  GAME: 'GamePacket',
+  game: 'GamePacket',
 };

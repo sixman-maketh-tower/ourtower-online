@@ -3,22 +3,49 @@
   "version": "1.0.0",
   "data": [
     {
-      "id": 1001,
+      "id": 101,
+      "type": 1,
+      "level": 1,
       "hp": 50,
-      "attackPower": 10,
-      "stage_id": 100,
-      "gold": 4,
-      "score": 100,
-      "speed": 1
+      "power": 5,
+      "gold": 10,
+      "score": 100
     },
     {
-      "id": 1002,
+      "id": 102,
+      "type": 2,
+      "level": 1,
       "hp": 60,
-      "attackPower": 11,
-      "stage_id": 101,
-      "gold": 5,
-      "score": 100,
-      "speed": 1
+      "power": 10,
+      "gold": 20,
+      "score": 150
+    },
+    {
+      "id": 103,
+      "type": 3,
+      "level": 1,
+      "hp": 70,
+      "power": 15,
+      "gold": 30,
+      "score": 200
+    },
+    {
+      "id": 104,
+      "type": 4,
+      "level": 1,
+      "hp": 80,
+      "power": 20,
+      "gold": 40,
+      "score": 250
+    },
+    {
+      "id": 105,
+      "type": 5,
+      "level": 1,
+      "hp": 90,
+      "power": 25,
+      "gold": 50,
+      "score": 300
     }
   ]
 }
