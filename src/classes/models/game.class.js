@@ -2,6 +2,12 @@ import { config } from '../../config/config.js';
 import { CANVAS_HEIGH, CANVAS_WIDTH } from '../../constants/game.js';
 import { gameStartNotification } from '../../utils/notification/game.notification.js';
 import { GameState, initialState } from '../../utils/packet/gamePacket.js';
+import { findHighScoreByUserId } from '../../db/user/user.db.js';
+import {
+  gameStartNotification,
+  gameOverNotification,
+  updateBaseHpNotification,
+} from '../../utils/notification/game.notification.js';
 
 class Game {
   constructor(id) {
@@ -40,13 +46,13 @@ class Game {
     return opponentUser.id;
   }
 
-  // getUserHighScore(userId) {
-  //   const userData = getUserById(userId);
-  //   const userHighScore = userData.highScore;
-  //   return userHighScore;
-  // }
+  async getUserHighScore(userId) {
+    const user = this.getUser(userId);
+    const dbUserHighScore = await findHighScoreByUserId(user.id);
+    return dbUserHighScore;
+  }
 
-  startGame(userId) {
+  async startGame(userId) {
     if (this.users.length !== config.game.maxPlayer) {
       return false;
     }
@@ -54,18 +60,18 @@ class Game {
     this.state = config.game.state.playing;
     this.path = this.initMonsterPath(CANVAS_WIDTH, CANVAS_HEIGH);
 
+    const playerHighScore = await this.getUserHighScore(userId);
+
     const opponentUserId = this.getOpponentUserId(userId);
+    const opponentHighScore = await this.getUserHighScore(opponentUserId);
+
     this.getUser(userId).state = config.game.state.playing;
     this.getUser(opponentUserId).state = config.game.state.playing;
 
     const player1 = this.getUser(userId);
     const player2 = this.getUser(opponentUserId);
 
-    // const playerHighScore = this.getUserHighScore(userId);
-    // const opponentHighScore = this.getUserHighScore(opponentUserId);
-
     const initialGameState = initialState();
-
     const playerData = GameState(player1, this.path);
     const opponentData = GameState(player2, this.path);
 
@@ -138,34 +144,30 @@ class Game {
 
     return path;
   }
-  // initMonsterPath(width, height) {
-  //   const path = [];
-  //   let currentX = 0;
 
-  //   const amplitude = height / 3; // 진폭으로 상하 폭 결정
-  //   const frequency = 0.025; // 주파수로 곡률 결정
-  //   const phase = Math.random() * Math.PI * 2; // 위상으로 파형 결정 (시작 지점 변동)
+  getAllBaseHp(attackedUserId, attackedUserBaseHp) {
+    this.users.forEach((user) => {
+      let packet = null;
+      if (user.id === attackedUserId) {
+        packet = updateBaseHpNotification(false, attackedUserBaseHp);
+      } else {
+        packet = updateBaseHpNotification(true, attackedUserBaseHp);
+      }
+      user.socket.write(packet);
+    });
+  }
 
-  //   while (currentX <= width) {
-  //     const sineY = height / 2 + amplitude * Math.sin(frequency * currentX + phase);
-  //     const randomYChange = Math.floor(Math.random() * 100) - 50; // -50 ~ 50 범위의 랜덤 변화
-  //     let currentY = sineY + randomYChange;
-
-  //     // y 좌표에 대한 clamp 처리
-  //     if (currentY < 230) {
-  //       currentY = 230;
-  //     }
-  //     if (currentY > height) {
-  //       currentY = height;
-  //     }
-
-  //     path.push({ x: currentX, y: currentY });
-
-  //     currentX += Math.floor(Math.random() * 50) + 20;
-  //   }
-
-  //   return path;
-  // }
+  gameOver() {
+    for (const user of this.users) {
+      let packet = null;
+      if (user.baseHp > 0) {
+        packet = gameOverNotification(true);
+      } else {
+        packet = gameOverNotification(false);
+      }
+      user.socket.write(packet);
+    }
+  }
 }
 
 export default Game;
