@@ -11,3 +11,5 @@ export const INIT_BASE_DATA = {
 export const INIT_TOWER_COST = 100;
 export const INIT_GOLD = 100000;
 export const INIT_MONSTER_SPAWN_INTERVAL = 2;
+
+export const MAX_MONSTER_LEVEL = 5;

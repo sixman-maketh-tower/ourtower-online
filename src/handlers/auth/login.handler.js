@@ -4,7 +4,7 @@ import { SECRETKEY } from '../../constants/env.js';
 import { findUserByAccountId, updateUserLogin } from '../../db/user/user.db.js';
 import bcrypt from 'bcrypt';
 import JWT from 'jsonwebtoken';
-import { addUser } from '../../session/user.session.js';
+import { addUser, getUserById } from '../../session/user.session.js';
 
 const loginHandler = async ({ socket, payload }) => {
   const { id, password } = payload;
@@ -25,11 +25,8 @@ const loginHandler = async ({ socket, payload }) => {
     socket.write(loginFailResponse);
   } else {
     // 1-2. 있다면 먼저 비밀번호 검증
-    const passwordValidate = await bcrypt.compare(
-      password,
-      loginUser['password'],
-    );
-    
+    const passwordValidate = await bcrypt.compare(password, loginUser['password']);
+
     if (!passwordValidate) {
       const loginFailResponse = createResponse(PACKET_TYPES.LOGIN_RESPONSE, {
         success: false,
@@ -43,29 +40,39 @@ const loginHandler = async ({ socket, payload }) => {
     } else {
       // 1-3. 이제 진짜 로그인 성공
       // token을 만든다 ({id, password}), lastLogin 값을 업데이트해주고, login success response를 클라이언트에게 보내준다.
+
       const loginUserId = loginUser['id'];
       const loginUserAccountId = loginUser['accountId'];
-      console.log(loginUserId + ' / ' + loginUserAccountId);
-      await updateUserLogin(loginUserAccountId);
 
-      const token = JWT.sign(
-        {
-          id: loginUserId,
-        },
-        SECRETKEY,
-        { expiresIn: '1h' },
-      );
+      const findUser = getUserById(loginUserId);
+      if (!findUser) {
+        await updateUserLogin(loginUserAccountId);
+        const token = JWT.sign(
+          {
+            id: loginUserId,
+          },
+          SECRETKEY,
+          { expiresIn: '1h' },
+        );
 
-      addUser(socket, loginUserId);
+        addUser(socket, loginUserId);
 
-      const loginResponse = createResponse(PACKET_TYPES.LOGIN_RESPONSE, {
-        success: true,
-        message: 'Success',
-        token: token,
-        failCode: 0,
-      });
-
-      socket.write(loginResponse);
+        const loginResponse = createResponse(PACKET_TYPES.LOGIN_RESPONSE, {
+          success: true,
+          message: 'Success',
+          token: token,
+          failCode: 0,
+        });
+        socket.write(loginResponse);
+      } else {
+        const loginRejectResponse = createResponse(PACKET_TYPES.LOGIN_RESPONSE, {
+          success: false,
+          message: 'Fail: Already Exist User',
+          token: '',
+          failCode: 2,
+        });
+        socket.write(loginRejectResponse);
+      }
     }
   }
 };

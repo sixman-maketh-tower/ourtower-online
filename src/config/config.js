@@ -21,6 +21,7 @@ import {
   INIT_GOLD,
   INIT_MONSTER_SPAWN_INTERVAL,
   INIT_TOWER_COST,
+  MAX_MONSTER_LEVEL,
   MAX_PLAYER,
 } from '../constants/game.js';
 
@@ -51,6 +52,7 @@ export const config = {
       monsterSpawnInterval: INIT_MONSTER_SPAWN_INTERVAL,
     },
     baseData: INIT_BASE_DATA,
+    maxMonsterLevel: MAX_MONSTER_LEVEL,
   },
   database: {
     database: DB_NAME,
