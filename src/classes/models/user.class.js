@@ -9,17 +9,14 @@ class User {
     this.socket = socket;
     this.sequence = 0;
     this.lastUpdateTime = Date.now();
-
     this.state = config.game.state.waiting;
     this.gameId = null;
-
     this.gold = config.game.initData.gold;
     this.baseHp = config.game.initData.baseHp;
     this.score = 0;
-
     this.towers = [];
-
     this.monsters = [];
+    this.winLose = true;
   }
 
   init() {

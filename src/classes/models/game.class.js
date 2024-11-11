@@ -67,8 +67,7 @@ class Game {
   }
 
   async getUserHighScore(userId) {
-    const user = this.getUser(userId);
-    const dbUserHighScore = await findHighScoreByUserId(user.id);
+    const dbUserHighScore = await findHighScoreByUserId(userId);
     return dbUserHighScore;
   }
 

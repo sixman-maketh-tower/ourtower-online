@@ -1,6 +1,6 @@
 import { config } from '../config/config.js';
 import { INIT_BASE_DATA } from '../constants/game.js';
-import { findHighScoreByUserId } from '../db/user/user.db.js';
+import { findHighScoreByUserId, updateHighScore } from '../db/user/user.db.js';
 import { clearUserMosnterData } from '../models/monster.model.js';
 import { getGameSessions, removeGame } from '../session/game.session.js';
 import { getUserById, getUserBySocket } from '../session/user.session.js';
@@ -42,6 +42,8 @@ const gameEndHandler = async ({ socket, userId, payload }) => {
       user.score = 0;
       user.state = config.game.state.waiting;
       user.winLose = true;
+      user.towers = [];
+      user.monsters = [];
       clearUserMosnterData(user.id);
 
       opponentUser.gold = config.game.initData.gold;
@@ -49,14 +51,14 @@ const gameEndHandler = async ({ socket, userId, payload }) => {
       opponentUser.score = 0;
       opponentUser.state = config.game.state.waiting;
       opponentUser.winLose = true;
+      opponentUser.towers = [];
+      opponentUser.monsters = [];
       clearUserMosnterData(opponentUser.id);
 
       removeGame(gameSession.id);
-    } else {
-      console.error('Game not found');
-    }
+    } 
   } catch (e) {
-    console.error('monsterAttackBaseHandler Error: ', e);
+    console.error('gameOverHandler Error: ', e);
   }
 };
 
