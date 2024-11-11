@@ -134,7 +134,7 @@ export const deathMonsterNotification = (monsterId) => {
   );
 };
 
-export const stateSyncNotification = (user) => {
+export const stateSyncNotification = (game, user) => {
   const protoMessages = getProtoMessages();
   const gamePacket = protoMessages.GamePacket;
 
@@ -145,6 +145,7 @@ export const stateSyncNotification = (user) => {
   payload[packetTypeName] = {
     userGold: user.gold,
     baseHp: user.baseHp,
+    monsterType: game.monsterType,
     monsterLevel: 1,
     score: user.score,
     towers: [],

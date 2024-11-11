@@ -1,23 +1,12 @@
 import { config } from '../../config/config.js';
-<<<<<<< HEAD
-import {
-  CANVAS_HEIGH,
-  CANVAS_WIDTH,
-  INIT_BASE_DATA,
-  INIT_GOLD,
-  INIT_MONSTER_SPAWN_INTERVAL,
-  INIT_TOWER_COST,
-} from '../../constants/game.js';
-=======
-import { CANVAS_HEIGH, CANVAS_WIDTH } from '../../constants/game.js';
 import { GameState, initialState } from '../../utils/packet/gamePacket.js';
->>>>>>> develop
 import { findHighScoreByUserId } from '../../db/user/user.db.js';
 import {
   gameStartNotification,
   gameOverNotification,
   updateBaseHpNotification,
 } from '../../utils/notification/game.notification.js';
+import IntervalManager from '../managers/interval.manager.js';
 
 class Game {
   constructor(id) {
@@ -28,6 +17,10 @@ class Game {
 
     this.monsterUniqueId = 0;
     this.towerUniqueId = 0;
+
+    this.monsterType = 0;
+
+    this.intervalManager = new IntervalManager();
   }
 
   // Game에 User가 참가
@@ -42,7 +35,7 @@ class Game {
     if (this.users.length === config.game.maxPlayer) {
       setTimeout(() => {
         this.startGame(user.id);
-      }, 1000);
+      }, 2000);
     }
   }
 
@@ -85,7 +78,9 @@ class Game {
     }
 
     this.state = config.game.state.playing;
-    this.path = this.initMonsterPath(CANVAS_WIDTH, CANVAS_HEIGH);
+    this.monsterType = 1;
+    this.path = this.initMonsterPath();
+    this.intervalManager.addMonsterTypeInterval(this.id, this.changeMonsterType.bind(this), 10000);
 
     const playerHighScore = await this.getUserHighScore(userId);
 
@@ -98,41 +93,9 @@ class Game {
     const player1 = this.getUser(userId);
     const player2 = this.getUser(opponentUserId);
 
-<<<<<<< HEAD
-    const initialGameState = {
-      baseHp: INIT_BASE_DATA.maxHp,
-      towerCost: INIT_TOWER_COST,
-      initialGold: INIT_GOLD,
-      monsterSpawnInterval: INIT_MONSTER_SPAWN_INTERVAL,
-    };
-
-    const playerData = {
-      gold: player1.gold,
-      base: INIT_BASE_DATA,
-      highScore: playerHighScore,
-      towers: player1.towers,
-      monsters: [],
-      monsterLevel: 1,
-      score: player1.score,
-      monsterPath: this.path,
-      basePosition: this.path[this.path.length - 1],
-    };
-    const opponentData = {
-      gold: player2.gold,
-      base: INIT_BASE_DATA,
-      highScore: opponentHighScore,
-      towers: player2.towers,
-      monsters: [],
-      monsterLevel: 1,
-      score: player2.score,
-      monsterPath: this.path,
-      basePosition: this.path[this.path.length - 1],
-    };
-=======
     const initialGameState = initialState();
     const playerData = GameState(player1, this.path, playerHighScore);
     const opponentData = GameState(player2, this.path, opponentHighScore);
->>>>>>> develop
 
     this.users.forEach((user, index) => {
       let startPacket = null;
@@ -238,6 +201,11 @@ class Game {
       }
       user.socket.write(packet);
     }
+  }
+
+  changeMonsterType() {
+    if(this.monsterType < 5)
+      this.monsterType += 1;
   }
 }
 

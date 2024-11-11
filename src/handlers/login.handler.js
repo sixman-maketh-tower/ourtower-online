@@ -27,6 +27,7 @@ const loginHandler = async ({ socket, userId, payload }) => {
       password,
       loginUser['password'],
     );
+    
     if (!passwordValidate) {
       const loginFailResponse = createResponse(PACKET_TYPES.LOGIN_RESPONSE, {
         success: false,

@@ -104,7 +104,7 @@ export const towerAttackHandler = async ({ socket, userId, payload }) => {
   if (!monsterAlive && dieMonster) {
     user.catchMonster(dieMonster);
 
-    const stateSyncNotificationPacket = stateSyncNotification(user);
+    const stateSyncNotificationPacket = stateSyncNotification(game, user);
     socket.write(stateSyncNotificationPacket);
   }
 };

@@ -7,7 +7,7 @@ import monsterAttackBaseHandler from './monsterAttackBase.handler.js';
 import gameEndHandler from './gameEnd.handler.js';
 import registerHandler from './register.handler.js';
 import { towerPurchaseHandler, towerAttackHandler } from './tower.handler.js';
-import matchingGameHandler from './game/matchingGame.handler.js.js';
+import matchingGameHandler from './game/matchingGame.handler.js';
 import spawnMonsterHandler from './spawnMonster.handler.js';
 import deathMonsterHandler from './monsterDeath.handler.js';
 
