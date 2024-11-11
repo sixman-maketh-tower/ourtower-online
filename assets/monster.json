@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "data": [
     {
-      "id": 101,
-      "type": 1,
-      "level": 1,
+      "id": 1001,
       "hp": 50,
       "hpPerLv": 5,
       "power": 5,
@@ -14,9 +12,7 @@
       "score": 100
     },
     {
-      "id": 102,
-      "type": 2,
-      "level": 1,
+      "id": 1002,
       "hp": 60,
       "hpPerLv": 6,
       "power": 10,

@@ -1,13 +1,4 @@
-import {
-  CLIENT_VERSION,
-  HOST,
-  PORT,
-  DB_NAME,
-  DB_USER,
-  DB_PASSWORD,
-  DB_HOST,
-  DB_PORT,
-} from '../constants/env.js';
+import { CLIENT_VERSION, HOST, PORT } from '../constants/env.js';
 import {
   PACKET_TYPE_LENGTH,
   PAYLOAD_LENGTH,

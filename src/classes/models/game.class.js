@@ -1,13 +1,4 @@
 import { config } from '../../config/config.js';
-import { GameState, initialState } from '../../utils/packet/gamePacket.js';
-import {
-  gameStartNotification,
-  gameOverNotification,
-  updateBaseHpNotification,
-} from '../../utils/notification/game.notification.js';
-import IntervalManager from '../managers/interval.manager.js';
-import { findHighScoreByUserId, updateHighScore } from '../../db/user/user.db.js';
-import { clearUserMonsterData } from '../../models/monster.model.js';
 
 class Game {
   constructor(id) {
@@ -32,17 +23,12 @@ class Game {
   });
   }
 
-
   // Game에 User가 참가
   addUser(user) {
     this.users.push(user);
     user.gameId = this.id;
 
-    if (this.users.length === config.game.maxPlayer) {
-      setTimeout(() => {
-        this.startGame(user.id);
-      }, 2000);
-    }
+    this.users.push(user);
   }
 
   getUser(userId) {
@@ -51,40 +37,10 @@ class Game {
 
   removeUser(userId) {
     this.users = this.users.filter((user) => user.id !== userId);
-    // this.intervalManager.removePlayer(userId);
+    this.intervalManager.removePlayer(userId);
   }
 
-  getOpponentUserId(userId) {
-    const opponentUser = this.users.find((user) => user.id !== userId);
-    return opponentUser.id;
-  }
-
-  getOpponentUser(userId) {
-    const opponentUser = this.users.find((user) => user.id !== userId);
-    return opponentUser;
-  }
-
-  getUniqueMonsterId() {
-    return this.monsterUniqueId++;
-  }
-
-  getUniqueTowerId() {
-    return this.towerUniqueId++;
-  }
-
-  async getUserHighScore(userId) {
-    const dbUserHighScore = await findHighScoreByUserId(userId);
-    return dbUserHighScore;
-  }
-
-  async startGame(userId) {
-    if (this.users.length !== config.game.maxPlayer) {
-      return false;
-    }
-
-    // 시작하기 전에 초기화
-    this.init();
-
+  startGame() {
     this.state = config.game.state.playing;
     this.monsterType = 1;
     this.path = this.initMonsterPath();
