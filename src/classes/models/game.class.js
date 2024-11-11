@@ -67,8 +67,7 @@ class Game {
   }
 
   async getUserHighScore(userId) {
-    const user = this.getUser(userId);
-    const dbUserHighScore = await findHighScoreByUserId(user.id);
+    const dbUserHighScore = await findHighScoreByUserId(userId);
     return dbUserHighScore;
   }
 
@@ -193,12 +192,7 @@ class Game {
 
   gameOver() {
     for (const user of this.users) {
-      let packet = null;
-      if (user.baseHp > 0) {
-        packet = gameOverNotification(true);
-      } else {
-        packet = gameOverNotification(false);
-      }
+      const packet = gameOverNotification(user.winLose);
       user.socket.write(packet);
     }
   }

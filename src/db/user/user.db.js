@@ -18,6 +18,7 @@ export const updateUserLogin = async (accountId) => {
 
 export const findHighScoreByUserId = async (userId) => {
     const [rows] = await dbPool.query(USER_QUERIES.FIND_HIGHSCORE_BY_USER_ID, [userId]);
+    if(rows.length === 0) return 0;
     return rows[0].highScore;
 };
 
