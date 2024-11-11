@@ -5,53 +5,20 @@
     {
       "id": 1001,
       "hp": 50,
-      "hpPerLv": 5,
-      "power": 5,
-      "powerPerLv": 1,
-      "gold": 10,
-      "score": 100
+      "attackPower": 10,
+      "stage_id": 100,
+      "gold": 4,
+      "score": 100,
+      "speed": 1
     },
     {
       "id": 1002,
       "hp": 60,
-      "hpPerLv": 6,
-      "power": 10,
-      "powerPerLv": 2,
-      "gold": 20,
-      "score": 150
-    },
-    {
-      "id": 103,
-      "type": 3,
-      "level": 1,
-      "hp": 70,
-      "hpPerLv": 7,
-      "power": 15,
-      "powerPerLv": 3,
-      "gold": 30,
-      "score": 200
-    },
-    {
-      "id": 104,
-      "type": 4,
-      "level": 1,
-      "hp": 80,
-      "hpPerLv": 8,
-      "power": 20,
-      "powerPerLv": 4,
-      "gold": 40,
-      "score": 250
-    },
-    {
-      "id": 105,
-      "type": 5,
-      "level": 1,
-      "hp": 90,
-      "hpPerLv": 9,
-      "power": 25,
-      "powerPerLv": 5,
-      "gold": 50,
-      "score": 300
+      "attackPower": 11,
+      "stage_id": 101,
+      "gold": 5,
+      "score": 100,
+      "speed": 1
     }
   ]
 }

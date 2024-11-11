@@ -3,28 +3,14 @@
   "version": "1.0.0",
   "data": [
     {
-      "id": 1001,
-      "type": 1,
-      "attack_power": 40,
-      "cost": 100
-    },
-    {
-      "id": 1002,
-      "type": 2,
-      "attack_power": 40,
-      "cost": 100
-    },
-    {
-      "id": 1003,
-      "type": 3,
-      "attack_power": 40,
-      "cost": 100
-    },
-    {
-      "id": 1004,
-      "type": 4,
-      "attack_power": 40,
-      "cost": 100
+      "id": 1,
+      "type": "basicTower",
+      "attack_power": 30,
+      "range": 175,
+      "cost": 100,
+      "cooldown": 180,
+      "beamDuration": 60,
+      "upgradeCost": 50
     }
   ]
 }
