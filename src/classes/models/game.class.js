@@ -1,5 +1,4 @@
 import { config } from '../../config/config.js';
-import { CANVAS_HEIGH, CANVAS_WIDTH } from '../../constants/game.js';
 import { GameState, initialState } from '../../utils/packet/gamePacket.js';
 import { findHighScoreByUserId } from '../../db/user/user.db.js';
 import {
@@ -7,6 +6,7 @@ import {
   gameOverNotification,
   updateBaseHpNotification,
 } from '../../utils/notification/game.notification.js';
+import IntervalManager from '../managers/interval.manager.js';
 
 class Game {
   constructor(id) {
@@ -14,11 +14,19 @@ class Game {
     this.users = [];
     this.state = config.game.state.waiting;
     this.path = [];
+
+    this.monsterUniqueId = 0;
+    this.towerUniqueId = 0;
+
+    this.monsterType = 0;
+
+    this.intervalManager = new IntervalManager();
   }
 
   // Game에 User가 참가
   addUser(user) {
     this.users.push(user);
+    user.gameId = this.id;
 
     if (this.users.length >= config.game.maxPlayer) {
       // throw new Error('게임 인원이 가득 차 참가하실 수 없습니다.');
@@ -45,6 +53,19 @@ class Game {
     return opponentUser.id;
   }
 
+  getOpponentUser(userId) {
+    const opponentUser = this.users.find((user) => user.id !== userId);
+    return opponentUser;
+  }
+
+  getUniqueMonsterId() {
+    return this.monsterUniqueId++;
+  }
+
+  getUniqueTowerId() {
+    return this.towerUniqueId++;
+  }
+
   async getUserHighScore(userId) {
     const user = this.getUser(userId);
     const dbUserHighScore = await findHighScoreByUserId(user.id);
@@ -57,7 +78,9 @@ class Game {
     }
 
     this.state = config.game.state.playing;
-    this.path = this.initMonsterPath(CANVAS_WIDTH, CANVAS_HEIGH);
+    this.monsterType = 1;
+    this.path = this.initMonsterPath();
+    this.intervalManager.addMonsterTypeInterval(this.id, this.changeMonsterType.bind(this), 10000);
 
     const playerHighScore = await this.getUserHighScore(userId);
 
@@ -77,8 +100,18 @@ class Game {
     this.users.forEach((user, index) => {
       let startPacket = null;
       if (userId === user.id)
-        startPacket = gameStartNotification(initialGameState, playerData, opponentData);
-      else startPacket = gameStartNotification(initialGameState, opponentData, playerData);
+        startPacket = gameStartNotification(
+          initialGameState,
+          playerData,
+          opponentData,
+        );
+      else
+        startPacket = gameStartNotification(
+          initialGameState,
+          opponentData,
+          playerData,
+        );
+
       user.socket.write(startPacket);
     });
 
@@ -131,7 +164,9 @@ class Game {
         if (newPos.y > 380) {
           newPos.y = 380;
         }
-        console.log(`(${i}, ${j}) => realAngle: ${realAngle}, newPos: (${newPos.x}, ${newPos.y})`);
+        // console.log(
+        //   `(${i}, ${j}) => realAngle: ${realAngle}, newPos: (${newPos.x}, ${newPos.y})`,
+        // );
         // endPosition에 도달하거나 초과할 때 강제로 마지막 위치를 맞춤
         if (newPos.x >= endPosition.x) {
           path.push({ x: endPosition.x, y: endPosition.y });
@@ -166,6 +201,11 @@ class Game {
       }
       user.socket.write(packet);
     }
+  }
+
+  changeMonsterType() {
+    if(this.monsterType < 5)
+      this.monsterType += 1;
   }
 }
 

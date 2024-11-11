@@ -68,11 +68,13 @@ export const PACKET_TYPE_NAMES = {
   // 몬스터 생성
   [PACKET_TYPES.SPAWN_MONSTER_REQUEST]: 'spawnMonsterRequest',
   [PACKET_TYPES.SPAWN_MONSTER_RESPONSE]: 'spawnMonsterResponse',
-  [PACKET_TYPES.SPAWN_ENEMY_MONSTER_NOTIFICATION]: 'spawnEnemyMonsterNotification',
+  [PACKET_TYPES.SPAWN_ENEMY_MONSTER_NOTIFICATION]:
+    'spawnEnemyMonsterNotification',
 
   // 전투 액션
   [PACKET_TYPES.TOWER_ATTACK_REQUEST]: 'towerAttackRequest',
-  [PACKET_TYPES.ENEMY_TOWER_ATTACK_NOTIFICATION]: 'enemyTowerAttackNotification',
+  [PACKET_TYPES.ENEMY_TOWER_ATTACK_NOTIFICATION]:
+    'enemyTowerAttackNotification',
   [PACKET_TYPES.MONSTER_ATTACK_BASE_REQUEST]: 'monsterAttackBaseRequest',
 
   // 기지 HP 업데이트 및 게임 오버
@@ -84,5 +86,6 @@ export const PACKET_TYPE_NAMES = {
 
   // 몬스터 사망 통지
   [PACKET_TYPES.MONSTER_DEATH_NOTIFICATION]: 'monsterDeathNotification',
-  [PACKET_TYPES.ENEMY_MONSTER_DEATH_NOTIFICATION]: 'enemyMonsterDeathNotification',
+  [PACKET_TYPES.ENEMY_MONSTER_DEATH_NOTIFICATION]:
+    'enemyMonsterDeathNotification',
 };

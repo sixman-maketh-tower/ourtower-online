@@ -14,7 +14,9 @@ const gameEndHandler = async ({ socket, userId, payload }) => {
 
     // 유저가 들어있는 게임 세션을 찾아야함
     const gameSessions = getGameSessions();
-    const gameSession = gameSessions.find((session) => session.users.includes(user));
+    const gameSession = gameSessions.find((session) =>
+      session.users.includes(user),
+    );
 
     if (!gameSession) {
       console.error('Game not found');
