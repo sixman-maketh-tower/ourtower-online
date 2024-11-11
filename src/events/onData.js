@@ -48,7 +48,7 @@ export const onData = (socket) => async (data) => {
       // packet을 packetType의 message 형태로 Parsing한다.
       const { payload } = packetParser(packet, packetType);
 
-      console.log(`Packet Type: ${packetType}, Payload: ${payload}`);
+      //console.log(`Packet Type: ${packetType}, Payload: ${payload}`);
 
       // packetType에 맞는 핸들러를 얻어온다.
       const handler = getHandlerById(packetType);

@@ -6,9 +6,10 @@ import loginHandler from './login.handler.js';
 import monsterAttackBaseHandler from './monsterAttackBase.handler.js';
 import gameEndHandler from './gameEnd.handler.js';
 import registerHandler from './register.handler.js';
-import towerPurchaseHandler from './tower.handler.js';
-import matchingGameHandler from './game/matchingGameHandler.js';
+import { towerPurchaseHandler, towerAttackHandler } from './tower.handler.js';
+import matchingGameHandler from './game/matchingGame.handler.js';
 import spawnMonsterHandler from './spawnMonster.handler.js';
+import deathMonsterHandler from './monsterDeath.handler.js';
 
 const handlers = {
   [HANDLER_IDS.REGISTER]: {
@@ -36,6 +37,11 @@ const handlers = {
     protoType: 'GamePacket',
     protoPayloadType: PACKET_TYPE_NAMES[HANDLER_IDS.SPAWN_MONSTER],
   },
+  [HANDLER_IDS.TOWER_ATTACK]: {
+    handler: towerAttackHandler,
+    protoType: 'GamePacket',
+    protoPayloadType: PACKET_TYPE_NAMES[HANDLER_IDS.TOWER_ATTACK],
+  },
   [HANDLER_IDS.MONSTER_ATTACK_BASE]: {
     handler: monsterAttackBaseHandler,
     protoType: 'GamePacket',
@@ -45,6 +51,11 @@ const handlers = {
     handler: gameEndHandler,
     protoType: 'GamePacket',
     protoPayloadType: PACKET_TYPE_NAMES[HANDLER_IDS.GAME_END],
+  },
+  [HANDLER_IDS.MONSTER_DEATH]: {
+    handler: deathMonsterHandler,
+    protoType: 'GamePacket',
+    protoPayloadType: PACKET_TYPE_NAMES[HANDLER_IDS.MONSTER_DEATH],
   },
 };
 

@@ -23,12 +23,14 @@ const monsterAttackBaseHandler = async ({ socket, userId, payload }) => {
 
     // 유저가 들어있는 게임 세션을 찾아야함
     const gameSessions = getGameSessions();
-    const gameSession = gameSessions.find((session) => session.users.includes(user));
+    const gameSession = gameSessions.find((session) =>
+      session.users.includes(user),
+    );
 
     let userAttackedBase = getAttackedBase(user.id);
 
     if (!userAttackedBase) {
-      console.error(`User's Monster Session not found`);
+      console.error(`User's Monster Data not found`);
     }
 
     if (!gameSession) {

@@ -27,15 +27,13 @@ const gameEndHandler = async ({ socket, userId, payload }) => {
       const opponentUser = gameSession.users.find((findUser) => findUser.id !== user.id);
 
       // 유저의 점수가 db에서 가진 최고점수를 넘겼다면 갱신
-      if (user.baseHp <= 0) {
-        if (user.score > (await findHighScoreByUserId(user.id))) {
-          await updateHighScore(user.score, user.id);
-          console.log(await findHighScoreByUserId(user.id));
-        }
-        if (user.score > (await findHighScoreByUserId(opponentUser.id))) {
-          await updateHighScore(opponentUser.score, opponentUser.id);
-          console.log(await findHighScoreByUserId(opponentUser.id));
-        }
+      if (user.score > (await findHighScoreByUserId(user.id))) {
+        await updateHighScore(user.score, user.id);
+        console.log(await findHighScoreByUserId(user.id));
+      }
+      if (opponentUser.score > (await findHighScoreByUserId(opponentUser.id))) {
+        await updateHighScore(opponentUser.score, opponentUser.id);
+        console.log(await findHighScoreByUserId(opponentUser.id));
       }
 
       // 게임 데이터 정보 초기화

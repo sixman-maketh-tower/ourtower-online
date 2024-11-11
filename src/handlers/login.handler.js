@@ -23,7 +23,11 @@ const loginHandler = async ({ socket, userId, payload }) => {
     socket.write(loginFailResponse);
   } else {
     // 1-2. 있다면 먼저 비밀번호 검증
-    const passwordValidate = await bcrypt.compare(password, loginUser['password']);
+    const passwordValidate = await bcrypt.compare(
+      password,
+      loginUser['password'],
+    );
+    
     if (!passwordValidate) {
       const loginFailResponse = createResponse(PACKET_TYPES.LOGIN_RESPONSE, {
         success: false,
@@ -49,13 +53,13 @@ const loginHandler = async ({ socket, userId, payload }) => {
         { expiresIn: '1h' },
       );
 
-      console.log('-----------------------');
-      console.log(token);
+      // console.log('-----------------------');
+      // console.log(token);
 
-      const verified = JWT.verify(token, SECRETKEY);
+      // const verified = JWT.verify(token, SECRETKEY);
 
-      console.log('-----------------------');
-      console.log(verified);
+      // console.log('-----------------------');
+      // console.log(verified);
 
       addUser(socket, loginUserId);
 

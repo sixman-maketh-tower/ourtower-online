@@ -56,6 +56,7 @@ export const config = {
       width: CANVAS_WIDTH,
       height: CANVAS_HEIGH,
     },
+    baseData: INIT_BASE_DATA,
   },
   database: {
     database: DB_NAME,

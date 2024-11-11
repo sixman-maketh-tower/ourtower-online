@@ -7,9 +7,10 @@ export const CANVAS_WIDTH = 1300;
 export const CANVAS_HEIGH = 360;
 
 export const INIT_BASE_DATA = {
-  hp: 50,
-  maxHp: 50,
+  hp: 300,
+  maxHp: 300,
 };
+
 export const INIT_TOWER_COST = 100;
 export const INIT_GOLD = 100000;
 export const INIT_MONSTER_SPAWN_INTERVAL = 100;
