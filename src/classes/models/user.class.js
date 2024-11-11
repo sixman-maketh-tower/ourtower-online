@@ -22,7 +22,7 @@ class User {
   init() {
     this.state = config.game.state.waiting;
     this.winLose = true;
-    this.gameId = null;
+    //this.gameId = null;
 
     this.gold = config.game.initData.gold;
     this.baseHp = config.game.initData.baseHp;

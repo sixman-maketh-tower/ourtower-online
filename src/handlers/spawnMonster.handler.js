@@ -13,8 +13,14 @@ const spawnMonsterHandler = async ({ socket, userId, payload }) => {
   const user = getUserBySocket(socket);
   const game = getGame(user.gameId);
 
+  if(!game)
+    return;
+
   const monsterId = game.getUniqueMonsterId();
-  const spawnMonster = user.spawnMonster(monsterId, monsters.data[0]);
+
+  const monsterData = monsters.data.find((monster) => monster.type === game.monsterType);
+
+  const spawnMonster = user.spawnMonster(monsterId, monsterData);
 
   const spawnMonsterResponse = createResponse(
     PACKET_TYPES.SPAWN_MONSTER_RESPONSE,

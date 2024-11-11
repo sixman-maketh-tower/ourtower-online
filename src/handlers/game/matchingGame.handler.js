@@ -7,8 +7,8 @@ import { getUserById, getUserBySocket } from '../../session/user.session.js';
 import { CustomError } from '../../utils/error/customError.js';
 import { ErrorCodes } from '../../utils/error/errorCodes.js';
 import {
-  clearUserMosnterData,
-  getUserMosnterData,
+  clearUserMonsterData,
+  getUserMonsterData,
 } from '../../models/monster.model.js';
 
 const matchingGameHandler = ({ socket, userId, payload }) => {
@@ -27,14 +27,16 @@ const matchingGameHandler = ({ socket, userId, payload }) => {
       waitingGame = addGame(gameId); // id 값은 어디에서 오는가
     }
 
+    // 3. 유저의 몬스터 기록 데이터가 존재하면 초기화.
+    if (getUserMonsterData(user)) {
+      clearUserMonsterData(user);
+    }
+
     // 이제 비어 있는 게임은 무조건 있는 상태
     // 2. 비어 있는 게임에 해당 유저를 참가시킨다.
     waitingGame.addUser(user);
 
-    // 3. 유저의 몬스터 기록 데이터가 존재하면 초기화.
-    if (getUserMosnterData(user)) {
-      clearUserMosnterData(user);
-    }
+
     // 끝...
 
     if (!gameSession) {
@@ -44,7 +46,7 @@ const matchingGameHandler = ({ socket, userId, payload }) => {
     if (!user) {
       throw new CustomError(ErrorCodes.USER_NOT_FOUND, '유저를 찾을 수 없습니다.');
     }
-    
+
   } catch (error) {
     handlerError(socket, error);
   }

@@ -1,8 +1,6 @@
 import { getGameSessions, removeGame } from '../session/game.session.js';
 import { getUserById, getUserBySocket } from '../session/user.session.js';
 import {
-  clearUserMosnterData,
-  createMonsterData,
   getAttackedBase,
   setAttackedBase,
 } from '../models/monster.model.js';
@@ -26,6 +24,9 @@ const monsterAttackBaseHandler = async ({ socket, userId, payload }) => {
     const gameSession = gameSessions.find((session) =>
       session.users.includes(user),
     );
+
+    if(!gameSession)
+      return;
 
     let userAttackedBase = getAttackedBase(user.id);
 

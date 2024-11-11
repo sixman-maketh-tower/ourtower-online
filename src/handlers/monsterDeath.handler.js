@@ -8,6 +8,9 @@ const deathMonsterHandler = async ({ socket, userId, payload }) => {
   const user = getUserBySocket(socket);
   const game = getGame(user.gameId);
 
+  if(!game)
+    return;
+
   const monsterIndex = user.getMonster(monsterId);
   if (monsterIndex === -1) {
     console.error(`Not Found Monster`);

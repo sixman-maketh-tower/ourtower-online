@@ -11,7 +11,7 @@ export const GameState = (user, path, highScore) => {
     highScore: playerHighScore,
     towers: player.towers,
     monsters: [],
-    monsterLevel: 0,
+    monsterLevel: 1,
     score: player.score,
     monsterPath: pathData,
     basePosition: pathData[pathData.length - 1],

@@ -1,12 +1,13 @@
 import { config } from '../../config/config.js';
 import { GameState, initialState } from '../../utils/packet/gamePacket.js';
-import { findHighScoreByUserId } from '../../db/user/user.db.js';
 import {
   gameStartNotification,
   gameOverNotification,
   updateBaseHpNotification,
 } from '../../utils/notification/game.notification.js';
 import IntervalManager from '../managers/interval.manager.js';
+import { findHighScoreByUserId, updateHighScore } from '../../db/user/user.db.js';
+import { clearUserMonsterData } from '../../models/monster.model.js';
 
 class Game {
   constructor(id) {
@@ -18,10 +19,21 @@ class Game {
     this.monsterUniqueId = 0;
     this.towerUniqueId = 0;
 
-    this.monsterType = 0;
+    this.monsterType = 1;
 
     this.intervalManager = new IntervalManager();
   }
+
+  init() {
+    // 유저 초기화
+    this.users.forEach((user) => {
+      user.init();
+      clearUserMonsterData(user.id);
+  });
+
+    // 게임 초기화
+  }
+
 
   // Game에 User가 참가
   addUser(user) {
@@ -76,6 +88,9 @@ class Game {
       return false;
     }
 
+    // 시작하기 전에 초기화
+    this.init();
+
     this.state = config.game.state.playing;
     this.monsterType = 1;
     this.path = this.initMonsterPath();
@@ -113,6 +128,8 @@ class Game {
 
       user.socket.write(startPacket);
     });
+
+    console.log("GameStart");
 
     return true;
   }
@@ -198,8 +215,19 @@ class Game {
   }
 
   changeMonsterType() {
-    if(this.monsterType < 5)
+    if (this.monsterType < 5)
       this.monsterType += 1;
+  }
+
+  async updateScore(user, opponentUser) {
+    if (user.score > (await findHighScoreByUserId(user.id))) {
+      await updateHighScore(user.score, user.id);
+      console.log(await findHighScoreByUserId(user.id));
+    }
+    if (opponentUser.score > (await findHighScoreByUserId(opponentUser.id))) {
+      await updateHighScore(opponentUser.score, opponentUser.id);
+      console.log(await findHighScoreByUserId(opponentUser.id));
+    }
   }
 }
 

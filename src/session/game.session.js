@@ -17,7 +17,10 @@ export const findWaitingGame = () => {
 // 게임을 gameSessions에서 삭제하는 함수
 export const removeGame = (id) => {
   const gameIndex = gameSessions.findIndex((game) => game.id === id);
+
   if (gameIndex !== -1) {
+    gameSessions[gameIndex].intervalManager.removeMonsterTypeInterval(gameSessions[gameIndex].id);
+
     return gameSessions.splice(gameIndex, 1)[0];
   }
 };

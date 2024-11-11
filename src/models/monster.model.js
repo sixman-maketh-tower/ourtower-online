@@ -8,7 +8,7 @@ export const createMonsterData = (userId) => {
 };
 
 // 유저의 몬스터 기록 데이터 조회
-export const getUserMosnterData = (userId) => {
+export const getUserMonsterData = (userId) => {
   return userMonsterData[userId];
 }
 
@@ -30,6 +30,6 @@ export const setAttackedBase = (userId, damage, baseHp, timestamp) => {
 };
 
 // 게임이 끝나면 유저의 몬스터 데이터 삭제
-export const clearUserMosnterData = (userId) => {
+export const clearUserMonsterData = (userId) => {
   delete userMonsterData[userId];
 };
