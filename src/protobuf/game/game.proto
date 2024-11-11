@@ -93,11 +93,10 @@ message S2CMatchStartNotification {
 message S2CStateSyncNotification {
     int32 userGold = 1;
     int32 baseHp = 2;
-    int32 monsterType = 3;
-    int32 monsterLevel = 4;
-    int32 score = 5;
-    repeated TowerData towers = 6;
-    repeated MonsterData monsters = 7;
+    int32 monsterLevel = 3;
+    int32 score = 4;
+    repeated TowerData towers = 5;
+    repeated MonsterData monsters = 6;
 }
 
 message C2STowerPurchaseRequest {

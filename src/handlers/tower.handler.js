@@ -26,6 +26,9 @@ export const towerPurchaseHandler = async ({ socket, userId, payload }) => {
 
   const game = getGame(user.gameId);
 
+  if(!game)
+    return;
+
   const towerUniqueId = game.getUniqueTowerId();
   const towerData = towers.data[0];
   // 타워 추가
@@ -60,6 +63,9 @@ export const towerAttackHandler = async ({ socket, userId, payload }) => {
 
   const user = getUserBySocket(socket);
   const game = getGame(user.gameId);
+
+  if(!game)
+    return;
 
   // console.log('--------------------------------------------');
   // console.log(towerId, monsterId, user.id);
@@ -103,6 +109,10 @@ export const towerAttackHandler = async ({ socket, userId, payload }) => {
   // 몬스터 사망 시, 유저에게 score를 올려준다.
   if (!monsterAlive && dieMonster) {
     user.catchMonster(dieMonster);
+    /** Debug용 Log : 타워 공격*/
+  console.log(
+    `[${user.id}] User : Score => ${user.score}!!!!!!!!!!!!!!!!!!!!!!!!!!!`,
+  );
 
     const stateSyncNotificationPacket = stateSyncNotification(game, user);
     socket.write(stateSyncNotificationPacket);

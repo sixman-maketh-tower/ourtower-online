@@ -13,10 +13,6 @@ class IntervalManager extends BaseManager {
     this.intervals.get(playerId).set(type, setInterval(callback, interval));
   }
 
-  addGameMonitor(gameId, callback, interval) {
-    this.addPlayer(gameId, callback, interval, "gameMonitor");
-  }
-
   addMonsterTypeInterval(gameId, callback, interval) {
     this.addPlayer(gameId, callback, interval, "monsterType");
   }
@@ -31,10 +27,10 @@ class IntervalManager extends BaseManager {
     }
   }
 
-  removeGameMonitor(gameId) {
+  removeMonsterTypeInterval(gameId) {
     if (this.intervals.has(gameId)) {
       const gameMonitorInterval = this.intervals.get(gameId);
-      clearInterval(gameMonitorInterval.get("gameMonitor"));
+      clearInterval(gameMonitorInterval.get("monsterType"));
       this.intervals.delete(gameId);
     }
   }

@@ -145,7 +145,6 @@ export const stateSyncNotification = (game, user) => {
   payload[packetTypeName] = {
     userGold: user.gold,
     baseHp: user.baseHp,
-    monsterType: game.monsterType,
     monsterLevel: 1,
     score: user.score,
     towers: [],
