@@ -19,7 +19,7 @@ import {
   CANVAS_WIDTH,
   GAME_STATE_PLAYING,
   GAME_STATE_WAITING,
-  INIT_BASE_HP,
+  INIT_BASE_DATA,
   INIT_GOLD,
   INIT_MONSTER_SPAWN_INTERVAL,
   INIT_TOWER_COST,
@@ -47,7 +47,7 @@ export const config = {
       playing: GAME_STATE_PLAYING,
     },
     initData: {
-      baseHp: INIT_BASE_HP,
+      baseHp: INIT_BASE_DATA.maxHp,
       towerCost: INIT_TOWER_COST,
       gold: INIT_GOLD,
       monsterSpawnInterval: INIT_MONSTER_SPAWN_INTERVAL,
@@ -56,6 +56,7 @@ export const config = {
       width: CANVAS_WIDTH,
       height: CANVAS_HEIGH,
     },
+    baseData: INIT_BASE_DATA,
   },
   database: {
     database: DB_NAME,

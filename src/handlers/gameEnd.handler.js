@@ -1,5 +1,4 @@
 import { config } from '../config/config.js';
-import { INIT_BASE_DATA, INIT_BASE_HP } from '../constants/game.js';
 import { findHighScoreByUserId } from '../db/user/user.db.js';
 import { clearUserMosnterData } from '../models/monster.model.js';
 import { getGameSessions, removeGame } from '../session/game.session.js';
@@ -34,7 +33,6 @@ const gameEndHandler = async ({ socket, userId, payload }) => {
 };
 
 export default gameEndHandler;
-
 
 // public void OnGameEnd()
 // {
