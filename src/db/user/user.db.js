@@ -1,4 +1,3 @@
-import { toCamelCase } from '../../utils/transformCamelCase.js'
 import dbPool from '../database.js'
 import { USER_QUERIES } from './user.queries.js'
 

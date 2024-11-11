@@ -1,11 +1,11 @@
-import { PACKET_TYPES } from '../constants/packetTypes.js';
-import { getServerGameAssets } from '../init/assets.js';
-import { getGame } from '../session/game.session.js';
-import { getUserBySocket } from '../session/user.session.js';
-import { spawnMonsterNotification } from '../utils/notification/game.notification.js';
-import { createResponse } from '../utils/response/createResponse.js';
+import { PACKET_TYPES } from '../../constants/packetTypes.js';
+import { getServerGameAssets } from '../../init/assets.js';
+import { getGame } from '../../session/game.session.js';
+import { getUserBySocket } from '../../session/user.session.js';
+import { spawnMonsterNotification } from '../../utils/notification/game.notification.js';
+import { createResponse } from '../../utils/response/createResponse.js';
 
-const spawnMonsterHandler = async ({ socket, userId, payload }) => {
+const spawnMonsterHandler = async ({ socket, payload }) => {
   // spawnMonsterRequest는 보내는 payload가 없다.
 
   const { monsters } = getServerGameAssets();

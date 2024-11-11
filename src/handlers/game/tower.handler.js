@@ -1,16 +1,15 @@
-import { INIT_MONSTER_SPAWN_INTERVAL } from '../constants/game.js';
-import { PACKET_TYPES } from '../constants/packetTypes.js';
-import { getServerGameAssets } from '../init/assets.js';
-import { getGame } from '../session/game.session.js';
-import { getUserBySocket } from '../session/user.session.js';
+import { PACKET_TYPES } from '../../constants/packetTypes.js';
+import { getServerGameAssets } from '../../init/assets.js';
+import { getGame } from '../../session/game.session.js';
+import { getUserBySocket } from '../../session/user.session.js';
 import {
   addEnemyTowerNotification,
   enemyTowerAttackNotification,
   stateSyncNotification,
-} from '../utils/notification/game.notification.js';
-import { createResponse } from '../utils/response/createResponse.js';
+} from '../../utils/notification/game.notification.js';
+import { createResponse } from '../../utils/response/createResponse.js';
 
-export const towerPurchaseHandler = async ({ socket, userId, payload }) => {
+export const towerPurchaseHandler = async ({ socket, payload }) => {
   // 유저가 접속한 게임세션 찾기
   // 게임에 속한 유저 데이터 중 towers 배열에 구매요청한 타워 추가
   // 타워구매 응답패킷 만들어 클라이언트에 반환
@@ -66,12 +65,6 @@ export const towerAttackHandler = async ({ socket, userId, payload }) => {
 
   if(!game)
     return;
-
-  // console.log('--------------------------------------------');
-  // console.log(towerId, monsterId, user.id);
-  // console.log(user.towers);
-  // console.log(user.monsters);
-  // console.log('--------------------------------------------');
 
   const userTower = user.towers.find((tower) => tower.id === towerId);
   if (!userTower) {

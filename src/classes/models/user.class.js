@@ -1,4 +1,3 @@
-import { addEnemyTowerNotification } from '../../utils/notification/game.notification.js';
 import Tower from './tower.class.js';
 import { config } from '../../config/config.js';
 import Monster from './monster.class.js';
@@ -9,37 +8,33 @@ class User {
     this.socket = socket;
     this.sequence = 0;
     this.lastUpdateTime = Date.now();
+
     this.state = config.game.state.waiting;
     this.gameId = null;
     this.gold = config.game.initData.gold;
     this.baseHp = config.game.initData.baseHp;
     this.score = 0;
+    this.winLose = true;
+
     this.towers = [];
     this.monsters = [];
-    this.winLose = true;
+
   }
 
   init() {
     this.state = config.game.state.waiting;
-    this.winLose = true;
-    //this.gameId = null;
-
     this.gold = config.game.initData.gold;
     this.baseHp = config.game.initData.baseHp;
     this.score = 0;
+    this.winLose = true;
 
     this.towers = [];
-
     this.monsters = [];
   }
 
   getNextSequence() {
     return ++this.sequence;
   }
-
-  initializeTower = () => {
-    this.towers = [];
-  };
 
   getAllTowers = () => {
     return this.towers;

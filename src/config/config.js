@@ -15,8 +15,6 @@ import {
   SEQUENCE_LENGTH,
 } from '../constants/packetTypes.js';
 import {
-  CANVAS_HEIGH,
-  CANVAS_WIDTH,
   GAME_STATE_PLAYING,
   GAME_STATE_WAITING,
   INIT_BASE_DATA,
@@ -51,10 +49,6 @@ export const config = {
       towerCost: INIT_TOWER_COST,
       gold: INIT_GOLD,
       monsterSpawnInterval: INIT_MONSTER_SPAWN_INTERVAL,
-    },
-    canvas: {
-      width: CANVAS_WIDTH,
-      height: CANVAS_HEIGH,
     },
     baseData: INIT_BASE_DATA,
   },
