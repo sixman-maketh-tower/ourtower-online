@@ -2,6 +2,7 @@ class Monster {
   constructor(id, data) {
     this.id = id;
     this.type = data.type;
+    this.level = data.level;
     this.hp = data.hp;
     this.power = data.power;
     this.gold = data.gold;

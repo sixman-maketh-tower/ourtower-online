@@ -5,6 +5,7 @@
     {
       "id": 101,
       "type": 1,
+      "level": 1,
       "hp": 50,
       "power": 5,
       "gold": 10,
@@ -13,6 +14,7 @@
     {
       "id": 102,
       "type": 2,
+      "level": 1,
       "hp": 60,
       "power": 10,
       "gold": 20,
@@ -21,6 +23,7 @@
     {
       "id": 103,
       "type": 3,
+      "level": 1,
       "hp": 70,
       "power": 15,
       "gold": 30,
@@ -29,6 +32,7 @@
     {
       "id": 104,
       "type": 4,
+      "level": 1,
       "hp": 80,
       "power": 20,
       "gold": 40,
@@ -37,6 +41,7 @@
     {
       "id": 105,
       "type": 5,
+      "level": 1,
       "hp": 90,
       "power": 25,
       "gold": 50,
