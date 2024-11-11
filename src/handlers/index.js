@@ -5,9 +5,9 @@ import { ErrorCodes } from '../utils/error/errorCodes.js';
 import loginHandler from './login.handler.js';
 import monsterAttackBaseHandler from './monsterAttackBase.handler.js';
 import gameEndHandler from './gameEnd.handler.js';
-import registerHandler from './register.Handler.js';
+import registerHandler from './register.handler.js';
 import { towerPurchaseHandler, towerAttackHandler } from './tower.handler.js';
-import matchingGameHandler from './game/matchingGameHandler.js';
+import matchingGameHandler from './game/matchingGame.handler.js.js';
 import spawnMonsterHandler from './spawnMonster.handler.js';
 import deathMonsterHandler from './monsterDeath.handler.js';
 

@@ -1,4 +1,5 @@
 import { config } from '../../config/config.js';
+<<<<<<< HEAD
 import {
   CANVAS_HEIGH,
   CANVAS_WIDTH,
@@ -7,6 +8,10 @@ import {
   INIT_MONSTER_SPAWN_INTERVAL,
   INIT_TOWER_COST,
 } from '../../constants/game.js';
+=======
+import { CANVAS_HEIGH, CANVAS_WIDTH } from '../../constants/game.js';
+import { GameState, initialState } from '../../utils/packet/gamePacket.js';
+>>>>>>> develop
 import { findHighScoreByUserId } from '../../db/user/user.db.js';
 import {
   gameStartNotification,
@@ -93,6 +98,7 @@ class Game {
     const player1 = this.getUser(userId);
     const player2 = this.getUser(opponentUserId);
 
+<<<<<<< HEAD
     const initialGameState = {
       baseHp: INIT_BASE_DATA.maxHp,
       towerCost: INIT_TOWER_COST,
@@ -122,6 +128,11 @@ class Game {
       monsterPath: this.path,
       basePosition: this.path[this.path.length - 1],
     };
+=======
+    const initialGameState = initialState();
+    const playerData = GameState(player1, this.path, playerHighScore);
+    const opponentData = GameState(player2, this.path, opponentHighScore);
+>>>>>>> develop
 
     this.users.forEach((user, index) => {
       let startPacket = null;
