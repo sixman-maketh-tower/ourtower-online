@@ -13,6 +13,7 @@ class IntervalManager extends BaseManager {
     this.intervals.get(playerId).set(type, setInterval(callback, interval));
   }
 
+  // 주기마다 게임에서 생성되고 있는 몬스터의 Type을 변경해준다.
   addMonsterTypeInterval(gameId, callback, interval) {
     this.addPlayer(gameId, callback, interval, "monsterType");
   }

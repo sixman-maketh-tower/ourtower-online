@@ -1,10 +1,10 @@
-import { PACKET_TYPES } from '../constants/packetTypes.js';
-import { createResponse } from '../utils/response/createResponse.js';
-import { findUserByAccountId, createUser, createHighScore } from '../db/user/user.db.js';
+import { PACKET_TYPES } from '../../constants/packetTypes.js';
+import { createResponse } from '../../utils/response/createResponse.js';
+import { findUserByAccountId, createUser, createHighScore } from '../../db/user/user.db.js';
 import Joi from 'joi';
 import bcrypt from 'bcrypt';
 
-const registerHandler = async ({ socket, userId, payload }) => {
+const registerHandler = async ({ socket, payload }) => {
   const { id, password, email } = payload;
   console.log(id, password, email);
 

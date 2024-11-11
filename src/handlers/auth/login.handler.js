@@ -1,16 +1,17 @@
-import { PACKET_TYPES } from '../constants/packetTypes.js';
-import { createResponse } from '../utils/response/createResponse.js';
-import { SECRETKEY } from '../constants/env.js';
-import { findUserByAccountId, updateUserLogin } from '../db/user/user.db.js';
+import { PACKET_TYPES } from '../../constants/packetTypes.js';
+import { createResponse } from '../../utils/response/createResponse.js';
+import { SECRETKEY } from '../../constants/env.js';
+import { findUserByAccountId, updateUserLogin } from '../../db/user/user.db.js';
 import bcrypt from 'bcrypt';
 import JWT from 'jsonwebtoken';
-import { addUser } from '../session/user.session.js';
+import { addUser } from '../../session/user.session.js';
 
-const loginHandler = async ({ socket, userId, payload }) => {
+const loginHandler = async ({ socket, payload }) => {
   const { id, password } = payload;
   console.log(id, password);
   // 1. db에서 id를 가진 유저를 찾는다.
   const loginUser = await findUserByAccountId(id);
+
   // 1-1. 만약 없다면 로그인 실패 response 보낸다.
   if (!loginUser) {
     const loginFailResponse = createResponse(PACKET_TYPES.LOGIN_RESPONSE, {
@@ -19,6 +20,7 @@ const loginHandler = async ({ socket, userId, payload }) => {
       token: '',
       failCode: 2,
     });
+
     console.log('Fail: Not exist Id');
     socket.write(loginFailResponse);
   } else {
@@ -35,6 +37,7 @@ const loginHandler = async ({ socket, userId, payload }) => {
         token: '',
         failCode: 2,
       });
+
       console.log('Fail: Dismatch password');
       socket.write(loginFailResponse);
     } else {
@@ -52,14 +55,6 @@ const loginHandler = async ({ socket, userId, payload }) => {
         SECRETKEY,
         { expiresIn: '1h' },
       );
-
-      // console.log('-----------------------');
-      // console.log(token);
-
-      // const verified = JWT.verify(token, SECRETKEY);
-
-      // console.log('-----------------------');
-      // console.log(verified);
 
       addUser(socket, loginUserId);
 

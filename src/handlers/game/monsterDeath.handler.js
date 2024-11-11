@@ -1,8 +1,8 @@
-import { getGame } from '../session/game.session.js';
-import { getUserBySocket } from '../session/user.session.js';
-import { deathMonsterNotification } from '../utils/notification/game.notification.js';
+import { getGame } from '../../session/game.session.js';
+import { getUserBySocket } from '../../session/user.session.js';
+import { deathMonsterNotification } from '../../utils/notification/game.notification.js';
 
-const deathMonsterHandler = async ({ socket, userId, payload }) => {
+const deathMonsterHandler = async ({ socket, payload }) => {
   const { monsterId } = payload;
 
   const user = getUserBySocket(socket);

@@ -1,14 +1,13 @@
-import { getGameSessions, removeGame } from '../session/game.session.js';
-import { getUserById, getUserBySocket } from '../session/user.session.js';
+import { getGameSessions } from '../../session/game.session.js';
+import { getUserBySocket } from '../../session/user.session.js';
 import {
   getAttackedBase,
   setAttackedBase,
-} from '../models/monster.model.js';
-import { getTotalAttackedDamage } from '../utils/monster/monster.util.js';
-import { config } from '../config/config.js';
-import { findHighScoreByUserId, updateHighScore } from '../db/user/user.db.js';
+} from '../../models/monster.model.js';
+import { getTotalAttackedDamage } from '../../utils/monster/monster.util.js';
+import { config } from '../../config/config.js';
 
-const monsterAttackBaseHandler = async ({ socket, userId, payload }) => {
+const monsterAttackBaseHandler = async ({ socket, payload }) => {
   try {
     const { damage } = payload;
 
