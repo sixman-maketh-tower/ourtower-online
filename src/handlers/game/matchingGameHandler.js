@@ -6,6 +6,10 @@ import { HANDLER_IDS, RESPONSE_SUCCESS_CODE } from '../../constants/handlerIds.j
 import { getUserById, getUserBySocket } from '../../session/user.session.js';
 import { CustomError } from '../../utils/error/customError.js';
 import { ErrorCodes } from '../../utils/error/errorCodes.js';
+import {
+  clearUserMosnterData,
+  getUserMosnterData,
+} from '../../models/monster.model.js';
 
 const matchingGameHandler = ({ socket, userId, payload }) => {
   try {
@@ -27,6 +31,10 @@ const matchingGameHandler = ({ socket, userId, payload }) => {
     waitingGame.addUser(user);
     //
 
+    // 3. 유저의 몬스터 기록 데이터가 존재하면 초기화.
+    if (getUserMosnterData(user)) {
+      clearUserMosnterData(user);
+    }
     // 끝...
 
     if (!gameSession) {

@@ -44,7 +44,7 @@ const handlers = {
   [HANDLER_IDS.GAME_END]: {
     handler: gameEndHandler,
     protoType: 'GamePacket',
-    protoPaylaodType: PACKET_TYPE_NAMES[HANDLER_IDS.GAME_END],
+    protoPayloadType: PACKET_TYPE_NAMES[HANDLER_IDS.GAME_END],
   },
 };
 

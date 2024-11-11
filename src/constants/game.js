@@ -6,7 +6,6 @@ export const GAME_STATE_PLAYING = 'playing';
 export const CANVAS_WIDTH = 1300;
 export const CANVAS_HEIGH = 360;
 
-export const INIT_BASE_HP = 50;
 export const INIT_BASE_DATA = {
   hp: 50,
   maxHp: 50,

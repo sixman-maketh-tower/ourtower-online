@@ -14,6 +14,7 @@ class User {
     this.baseHp = config.game.initData.baseHp;
     this.towerUniqueId = 0;
     this.state = config.game.state.waiting;
+    this.winLose = true;
   }
 
   getNextSequence() {

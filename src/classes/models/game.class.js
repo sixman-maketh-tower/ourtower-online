@@ -3,7 +3,6 @@ import {
   CANVAS_HEIGH,
   CANVAS_WIDTH,
   INIT_BASE_DATA,
-  INIT_BASE_HP,
   INIT_GOLD,
   INIT_MONSTER_SPAWN_INTERVAL,
   INIT_TOWER_COST,
@@ -80,7 +79,7 @@ class Game {
     const player2 = this.getUser(opponentUserId);
 
     const initialGameState = {
-      baseHp: INIT_BASE_HP,
+      baseHp: INIT_BASE_DATA.maxHp,
       towerCost: INIT_TOWER_COST,
       initialGold: INIT_GOLD,
       monsterSpawnInterval: INIT_MONSTER_SPAWN_INTERVAL,
@@ -191,14 +190,8 @@ class Game {
   }
 
   gameOver() {
-
     for (const user of this.users) {
-      let packet = null;
-      if (user.baseHp > 0) {
-        packet = gameOverNotification(true);
-      } else {
-        packet = gameOverNotification(false);
-      }
+      const packet = gameOverNotification(user.winLose);
       user.socket.write(packet);
     }
   }
