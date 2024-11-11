@@ -120,11 +120,13 @@ message C2SSpawnMonsterRequest {
 message S2CSpawnMonsterResponse {
     int32 monsterId = 1; 
     int32 monsterNumber = 2;
+    int32 monsterLevel = 3;
 }
 
 message S2CSpawnEnemyMonsterNotification {
     int32 monsterId = 1;
     int32 monsterNumber = 2;
+    int32 monsterLevel = 3;
 }
 
 message C2STowerAttackRequest {
